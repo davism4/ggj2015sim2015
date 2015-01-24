@@ -23,5 +23,8 @@ public class SceneMgr : MonoBehaviour {
         Application.LoadLevel("DesignScene");
     }
 
-
+    public void StartGame()
+    {
+        Application.LoadLevel("GameMenuScene");
+    }
 }
