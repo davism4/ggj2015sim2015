@@ -5,23 +5,23 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class MusicLevel : MonoBehaviour
 {
-    public SpriteRenderer[] topRenderers; // good/bad picture
-    public SpriteRenderer[] instrumentRenderers; // instrument picture
+    SpriteRenderer[] topRenderers; // good/bad picture
+    SpriteRenderer[] instrumentRenderers; // instrument picture
+    new AudioSource audio;
 
     public AudioClip[] Clips = new AudioClip[4];
-    public Sprite[] InsturmentSprites = new Sprite[4];
+    public Sprite[] InsturmentSprites = new Sprite[5];
     public Sprite[] MarkSprites = new Sprite[2];
 
     int Length;
 
-    bool[] correct;
-    int[] patternCorrect;
-    int[] patternEntered;
+    public bool[] correct;
+    public int[] patternCorrect;
+    public int[] patternEntered;
 
-    int numPlayed;
-    int numEntered;
-    float instrumentTimer;
-    float instrumentPlaytime = 1f; // how long each demo sound plays
+    public int numEntered;
+    public int playIndex;
+    public float instrumentTimer;
 
     public void EnterSound(InstrumentButton i)
     {
@@ -31,17 +31,12 @@ public class MusicLevel : MonoBehaviour
             i.audioSource.PlayOneShot(i.audioSource.clip);
             patternEntered[numEntered] = i.instrumentType;
             correct[numEntered] = (bool)(patternCorrect[numEntered] == patternEntered[numEntered]);
-            
+            instrumentRenderers[numEntered].sprite = InsturmentSprites[patternCorrect[numEntered]];
             topRenderers[numEntered].sprite = MarkSprites[correct[numEntered] ? 0 : 1];
 
-            Debug.Log("Entered " + i.ToString() + ": " + correct[numEntered].ToString());
+            //Debug.Log("Entered " + i.ToString() + ": " + correct[numEntered].ToString());
             numEntered++;
         }
-    }
-
-    void PlayInstrument()
-    {
-        numPlayed++;
     }
 
     void SetMusicQuiet()
@@ -64,12 +59,14 @@ public class MusicLevel : MonoBehaviour
         {
             int r = UnityEngine.Random.Range(0, 4);
             patternCorrect[i] = r;
-            instrumentRenderers[i].sprite = InsturmentSprites[r];
+            instrumentRenderers[i].sprite = null;// InsturmentSprites[4];
+            //instrumentRenderers[i].enabled = false;
         }
     }
     
     void Awake() // once
     {
+        audio = GetComponent<AudioSource>();
         GameObject[] nodes = GameObject.FindGameObjectsWithTag("MusicNode");
         Length = nodes.Length;
         Transform[] children = new Transform[Length];
@@ -77,7 +74,6 @@ public class MusicLevel : MonoBehaviour
         children[1] = transform.Find("MusicNode 1");
         children[2] = transform.Find("MusicNode 2");
         children[3] = transform.Find("MusicNode 3");
-        //child = new Transform[transform.childCount];
         
         topRenderers = new SpriteRenderer[Length];
         instrumentRenderers = new SpriteRenderer[Length];
@@ -93,20 +89,20 @@ public class MusicLevel : MonoBehaviour
 
         MainGame.AudioSounds = new AudioClip[Length];
         //DontDestroyOnLoad(transform.gameObject);
-        SetPattern();
+
     }
 
     void Start()
     {
-        numPlayed = 0;
+        SetPattern();
         numEntered = 0;
-        instrumentTimer = 0f;
-        // make correct pattern
+        playIndex = 0;
+        instrumentTimer = 0;
     }
 
     void Update()
     {
-        if (numPlayed < Length)
+        if (playIndex < 4)
         {
             if (instrumentTimer > 0f)
             {
@@ -114,10 +110,20 @@ public class MusicLevel : MonoBehaviour
             }
             else
             {
-                numPlayed++;
-                instrumentTimer = instrumentPlaytime;
+                instrumentTimer = 1.0f;
+                audio.Stop();
+                audio.PlayOneShot(Clips[patternCorrect[playIndex]]);
+                if (playIndex > 0)
+                {
+                    instrumentRenderers[playIndex-1].sprite = null;
+                    
+                }
+                instrumentRenderers[playIndex].sprite = InsturmentSprites[4];//patternCorrect[playIndex]];
+                playIndex++;
+                
             }
         }
+        
     }
 
     void LateUpdate()
