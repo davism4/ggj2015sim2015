@@ -68,6 +68,11 @@ public class MusicLevel : MonoBehaviour
         DontDestroyOnLoad(transform.gameObject);
     }
 
+    //void OnGUI()
+    //{
+    //    MainGame.Tick();
+    //}
+
     void Start()
     {
         numPlayed = 0;

@@ -20,7 +20,12 @@ public class DesignLevelPlayer : MonoBehaviour
         rigidbody2D	= GetComponent<Rigidbody2D>();
 		DontDestroyOnLoad(transform.gameObject);
     }
-    
+
+    void OnGUI()
+    {
+        MainGame.Tick();
+    }
+
     void Start()
     {
 		WordCount	= 0;
