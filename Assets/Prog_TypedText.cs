@@ -126,69 +126,42 @@ public class Prog_TypedText : MonoBehaviour {
                 }
                 else
                 {
+                    char result = '\0';
+                    string possibleKeys = "!@#$%^&*()";
                     if (e.keyCode.ToString().Contains("Alpha"))
-                    {
-                        char result;
-                        if (shiftPressed)
-                        {
-                            string possibleKeys = "!@#$%^&*()";
-                            result = possibleKeys[int.Parse(e.keyCode.ToString().Replace("Alpha", "")) - 1];
-                        }
-                        else
-                            result = e.keyCode.ToString().Replace("Alpha", "")[0];
-                    }
+                        result = shiftPressed ? possibleKeys[int.Parse(e.keyCode.ToString().Replace("Alpha", "")) - 1] : e.keyCode.ToString().Replace("Alpha", "")[0];
                     else if (e.keyCode == KeyCode.BackQuote)
-                    {
-
-                    }
+                        result = shiftPressed ? '~' : '`';
                     else if (e.keyCode == KeyCode.Minus)
-                    {
-
-                    }
+                        result = shiftPressed ? '_' : '-';
                     else if (e.keyCode == KeyCode.Equals)
-                    {
-
-                    }
+                        result = shiftPressed ? '+' : '=';
                     else if (e.keyCode == KeyCode.LeftBracket)
-                    {
-
-                    }
+                        result = shiftPressed ? '{' : '[';
                     else if (e.keyCode == KeyCode.RightBracket)
-                    {
-
-                    }
+                        result = shiftPressed ? '}' : ']';
                     else if (e.keyCode == KeyCode.Backslash)
-                    {
-
-                    }
+                        result = shiftPressed ? '|' : '\\';
                     else if (e.keyCode == KeyCode.Semicolon)
-                    {
-
-                    }
+                        result = shiftPressed ? ':' : ';';
                     else if (e.keyCode == KeyCode.Quote)
-                    {
-
-                    }
+                        result = shiftPressed ? '"' : '\'';
                     else if (e.keyCode == KeyCode.Comma)
-                    {
-
-                    }
+                        result = shiftPressed ? '<' : ',';
                     else if (e.keyCode == KeyCode.Period)
-                    {
-
-                    }
+                        result = shiftPressed ? '>' : '.';
                     else if (e.keyCode == KeyCode.Slash)
-                    {
+                        result = shiftPressed ? '?' : '/';
+                    else if (e.keyCode.ToString().Length == 1)
+                        result = shiftPressed ? e.keyCode.ToString()[0] : e.keyCode.ToString().ToLower()[0];
 
-                    }
-                    else
+                    if (result != '\0')
                     {
-
+                        // Add result to string
+                        // Add result to linked list
+                        // Check if linked list matches
                     }
                 }
-
-
-                //
             }
         }
         else if (e.type == EventType.KeyUp)
