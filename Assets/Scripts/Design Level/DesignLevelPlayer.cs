@@ -54,8 +54,7 @@ public class DesignLevelPlayer : MonoBehaviour
     {
         if (WordCount == 3)
         {
-            MainGame.DesignQuality = ((float)GoodCount) / WordCount;
-            Application.LoadLevel("GameMenuScene");
+            MainGame.DesignQuality = ((float)GoodCount) / WordCount;            Application.LoadLevel("GameMenuScene");
         }
     }
 
