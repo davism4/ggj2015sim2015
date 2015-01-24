@@ -1,28 +1,32 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 
 public class MainGame : MonoBehaviour {
 
-	public float time; // seconds
-	public int IntTime {
-		get { return Mathf.RoundToInt(time); }
-	}
+	public static float time; // seconds
 	
-	public string GameTitle;
-	public Texture2D ArtTexture;
-	public AudioClip[] AudioSounds;
+	public static string GameTitle;
+	public static Texture2D ArtTexture;
+	public static AudioClip[] AudioSounds;
+
+    public static float CodeQuality = 0;
+    public static float ArtQuality = 0;
+    public static float AudioQuality = 0;
+    public static float DesignQuality = 0;
 	
-	public float ArtQuality = 0f;
-	public float AudioQuality = 0f;
-	public float StringQuality = 0f;
-	
-	void Awake()
-	{
-		time = 48f;
-	}
-	
-	void Update()
+	public static int IndexSceneStart = 0;
+    public static int IndexSceneInstructions = 1;
+    public static int IndexSceneGameMenu = 2;
+    public static int IndexSceneArt = 3;
+    public static int IndexSceneCode = 4;
+    public static int IndexSceneDesign = 5;
+    public static int IndexSceneMusic = 6;
+    public static int IndexSceneEnd = 7;
+
+    void Update()
 	{
 		time -= Time.deltaTime;
 	}
+
 }
