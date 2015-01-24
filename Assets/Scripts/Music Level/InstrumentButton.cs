@@ -28,7 +28,7 @@ public class InstrumentButton : MonoBehaviour
             transform.localScale.y*rect.height/2
         );
         texture = GetComponent<SpriteRenderer>().sprite.texture;
-        musiclevel = GameObject.FindObjectOfType<MusicLevel>().GetComponent<MusicLevel>();
+        musiclevel = GameObject.FindObjectOfType<MusicLevel>();
         switch (instrumentType)
         {
             case MusicLevel.Instrument.Bell:

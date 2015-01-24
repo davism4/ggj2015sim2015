@@ -67,7 +67,7 @@ public class DesignIdeaGenerator : MonoBehaviour
         leftLimit = transform.FindChild("Left Limit").transform.position.x;
         rightLimit = transform.FindChild("Right Limit").transform.position.x;
         yLimit = transform.FindChild("Right Limit").transform.position.y;
-		DontDestroyOnLoad(transform.gameObject);
+		//DontDestroyOnLoad(transform.gameObject);
     }
     
     void Start() // each scene load

@@ -18,7 +18,7 @@ public class DesignLevelPlayer : MonoBehaviour
     {
         transform	= GetComponent<Transform>();
         rigidbody2D	= GetComponent<Rigidbody2D>();
-		DontDestroyOnLoad(transform.gameObject);
+		//DontDestroyOnLoad(transform.gameObject);
     }
 
     void Start()
@@ -49,7 +49,8 @@ public class DesignLevelPlayer : MonoBehaviour
     {
         if (WordCount == 3)
         {
-            MainGame.DesignQuality = ((float)GoodCount) / WordCount;            Application.LoadLevel("GameMenuScene");
+            MainGame.DesignQuality = ((float)GoodCount) / WordCount;
+            Application.LoadLevel("GameMenuScene");
         }
     }
 

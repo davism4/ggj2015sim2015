@@ -15,8 +15,8 @@ public class DesignIdea : MonoBehaviour {
 	
 	void Awake()
     {
-    	transform = GetComponent<Transform>();
-       //guiStyle = GetComponent<GUIStyle>();
+        transform = GetComponent<Transform>();
+        //guiStyle = GetComponent<GUIStyle>();
         speed = UnityEngine.Random.Range(SpeedMin, SpeedMax);
         //rigidbody2D.velocity = -Vector2.up * UnityEngine.Random.Range(SpeedMin, SpeedMax);
         //text = GetComponent<Text>();
@@ -44,6 +44,7 @@ public class DesignIdea : MonoBehaviour {
 
     void OnGUI()
     {
+        
         Vector3 point = Camera.main.WorldToScreenPoint(transform.position);
         Rect r = new Rect(
             point.x - Word.Length,//*guiText.fontSize/2,
