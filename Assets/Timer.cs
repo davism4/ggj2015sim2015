@@ -61,10 +61,11 @@ public class Timer : MonoBehaviour {
         //timerStyle.alignment = TextAnchor.MiddleLeft;
         // draw
         //GUI.Label(new Rect(5 + offsetx, 5 + offsety, 110, 110), timerTexture);
-        if (time <= 0 && Application.loadedLevelName != "MainGameScene")
+        if (time <= 0 && !MainGame.goingToResults)
         {
             //Debug.Log("TIME'S UP!");
             Application.LoadLevel("GameMenuScene");
+            MainGame.StartResultsTransition();
         }
 
     }

@@ -5,8 +5,12 @@ using UnityEngine;
 // Game loads at this screen. Has buttons to (1) read instructions or (2) start game.
 public class StartGame : MonoBehaviour
 {
-    void LoadMainGame()
+    void Start()
     {
+        GameObject obj = GameObject.Find("TimerCanvas");
+        if (obj != null)
+            Destroy(obj);
+
         PlayerPrefs.SetString("GameTitle", "Game Title Here");
         PlayerPrefs.SetFloat("time", 48f);
         PlayerPrefs.SetInt("CodeQuality", 0);
