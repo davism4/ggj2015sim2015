@@ -4,6 +4,24 @@ using UnityEngine.UI;
 
 public class Prog_TypedText : MonoBehaviour {
 
+    public static string[] Programs = new string[] {
+        "void Main() {\n\tnew Game().make();\n}",
+        "def main:\n\tprint \"pretend this is a game\"",
+        "void main()\n{\n\twhile(1) cout << \"lol\";\n}",
+        "void main()\n{\n\tPrayToGameJamGods();\n}",
+        "void Main() { throw new Exception(); }",
+        "(car (cdr 1 2) (+ 1 3))",
+        "public static void main(String[] args)  { ; }",
+        "if (q>5) boolean debug = false;",
+        "System.out.println(\"hello world\");",
+        "do { x += 2; } while (x<8);",
+        "Filesystem.destroy(\"system32\");",
+        "return GUI.do(\"Visual Basic\");",
+        "if (error):\n\tprint \"everything is fine\"",
+        "<html>this is a game</html>",
+        "if (y & z) \n{ \n\ty << 2; \n\treturn z; \n}"
+    };
+
     public class LinkedList
     {
         public class Node
@@ -82,7 +100,8 @@ public class Prog_TypedText : MonoBehaviour {
 	// Use this for initialization
     void Start()
     {
-        ToType = TypeThis.GetComponent<Text>().text;
+        ToType = Programs[Random.Range(0, Programs.Length - 1)];
+        TypeThis.GetComponent<Text>().text = ToType;
         text = GetComponent<Text>();
         needToType = new LinkedList();
         for (int i = 0; i < ToType.Length; i++)
@@ -157,7 +176,7 @@ public class Prog_TypedText : MonoBehaviour {
                 }
                 else if (e.keyCode == KeyCode.Space || e.keyCode == KeyCode.Tab || e.keyCode == KeyCode.Return)
                 {
-                    // Ignore  
+                    // Ignore
                 }
                 else
                 {
@@ -232,8 +251,6 @@ public class Prog_TypedText : MonoBehaviour {
                     }
                 }
             }
-
-//            Debug.Log("Current index: " + current.pointerIndex + "   NeedToType index: " + needToType.pointerIndex + "   Current pointer value: " + current.pointer.value + "   NeedToType pointer value: " + needToType.pointer.value);
         }
     }
 }
