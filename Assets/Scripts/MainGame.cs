@@ -4,16 +4,41 @@ using System.Collections;
 
 public class MainGame : MonoBehaviour {
 
+    public static GameObject manager;
+
 	public static float time; // seconds
+    public static bool AtQA = false;
+
 	public static string GameTitle;
 	public static Texture2D ArtTexture;
 	public static AudioClip[] AudioSounds;
+	
+    public static AudioSource MusicSource;
+    
+    public static float CodeQuality = 0;
+    public static float ArtQuality = 0;
+    public static float AudioQuality = 0;
+    public static float DesignQuality = 0;
+    public static float QualityQuality = 0;
 
-    public static float CodeQuality		= 0;
-    public static float ArtQuality		= 0;
-    public static float AudioQuality	= 0;
-    public static float DesignQuality	= 0;
+    void Start()
+    {
+        if (CodeQuality > 0 && AudioQuality > 0 && DesignQuality > 0 && ArtQuality > 0 && !AtQA)
+        {
+            AtQA = true;
+            Application.LoadLevel("QAScene");
+        }
 
+        if (manager == null)
+        {
+            manager = this.gameObject;
+            MusicSource = GetComponent<AudioSource>();
+            MusicSource.Play();
+        }
+        if (this.gameObject != manager)
+            Destroy(this.gameObject);
+        DontDestroyOnLoad(this.gameObject);
+    }
     static Texture2D timerTexture;
     static GUIStyle timerStyle;
 
@@ -23,21 +48,10 @@ public class MainGame : MonoBehaviour {
         timerTexture = Resources.Load<Texture2D>("Art/timerBase");
     }
 
-    void Start()
-    {
-        StartGame();
-    }
-
     void Update()
 	{
 		
 	}
-
-    public void MainGameTimer()
-    {
-        
-    }
-
 
     public static void StartGame()
     {
@@ -65,10 +79,11 @@ public class MainGame : MonoBehaviour {
         GUI.skin.label.fontSize = Mathf.RoundToInt(15 + 3 * panicScale);
         GUI.Label(new Rect(24, 42, 55, 55),
                 time > 0f? time.ToString("##.##"): "0.00", timerStyle);
-        if (time <= 0 && Application.loadedLevel != IndexSceneMain)
+
+        if (time <= 0 && Application.loadedLevelName != "MainGameScene")
         {
             Debug.Log("TIME'S UP!");
-            Application.LoadLevel(IndexSceneMain);
+            Application.LoadLevel("GameMenuScene");
         }
         
     }

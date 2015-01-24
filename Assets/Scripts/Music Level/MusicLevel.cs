@@ -111,7 +111,7 @@ public class MusicLevel : MonoBehaviour
                 }
             }
             MainGame.AudioQuality = goodcount / Length;
-            Application.LoadLevel(MainGame.IndexSceneMain);
+            Application.LoadLevel("GameMenuScene");
         }
     }
 }
