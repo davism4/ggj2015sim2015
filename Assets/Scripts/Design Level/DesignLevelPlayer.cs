@@ -9,28 +9,27 @@ public class DesignLevelPlayer : MonoBehaviour
     [HideInInspector] public new Transform transform;
     [HideInInspector] public new Rigidbody2D rigidbody2D;
     public int WordCount;
-    public int GoodWordCount;
+    public float GoodCount;
     public float moveSpeed = 2f;
 
     public string title;
 
-    // Other
-    MainGame mainGame;
-
     void Awake()
     {
-        transform = GetComponent<Transform>();
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        
-        mainGame = GameObject.FindGameObjectWithTag("GameController").GetComponent<MainGame>();
-        WordCount = 0;
-        GoodWordCount = 0;
+        transform	= GetComponent<Transform>();
+        rigidbody2D	= GetComponent<Rigidbody2D>();
+		DontDestroyOnLoad(transform.gameObject);
+    }
+    
+    void Start()
+    {
+		WordCount	= 0;
+		GoodCount	= 0f;
     }
 
 	void Update()
     {
         title = MainGame.GameTitle;
-        
         float horizontal = Input.GetAxis("Horizontal");
         if (horizontal > 0f)
         {
@@ -44,25 +43,23 @@ public class DesignLevelPlayer : MonoBehaviour
         {
             rigidbody2D.velocity = Vector2.zero;
         }
-       
     }
 
     void LateUpdate()
     {
         if (WordCount == 3)
         {
-            MainGame.DesignQuality = ((float)GoodWordCount) / WordCount;
-            Application.LoadLevel(MainGame.IndexSceneGameMenu);
+            MainGame.DesignQuality = GoodCount / WordCount;
+            Application.LoadLevel(MainGame.IndexSceneMain);
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        
         if (WordCount < 3 && other.gameObject.CompareTag("DesignIdea"))
         {
             DesignIdea d = other.gameObject.GetComponent<DesignIdea>();
-            if (d.Good) GoodWordCount++;
+            if (d.Good) GoodCount++;
             WordCount++;
             if (WordCount == 3)
             {
