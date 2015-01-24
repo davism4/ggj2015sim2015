@@ -5,7 +5,7 @@ public class MainGame : MonoBehaviour {
 
 	public float time; // seconds
 	public int IntTime {
-		get { return Mathf.RoundToInt(Time); }
+		get { return Mathf.RoundToInt(time); }
 	}
 	
 	public string GameTitle;
