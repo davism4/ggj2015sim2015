@@ -21,7 +21,7 @@ public class QAGameplay : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            MainGame.QualityQuality++;
+            MainGame.QualityQuality += 0.05f;
             swatter.transform.position = ((GameObject)bugs[0]).transform.position;
             GameObject.Destroy(bugs[0]);
             bugs.RemoveAt(0);

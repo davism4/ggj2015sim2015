@@ -228,7 +228,7 @@ public class Prog_TypedText : MonoBehaviour {
                                 needToType.pointerIndex++;
                                 if (needToType.pointer == null)
                                 {
-                                    MainGame.CodeQuality = 100;
+                                    MainGame.CodeQuality = 1;
                                     Application.LoadLevel("GameMenuScene");
                                     return;
                                 }

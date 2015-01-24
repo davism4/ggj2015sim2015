@@ -7,7 +7,8 @@ public class MainGame : MonoBehaviour {
     public static GameObject manager;
 
 	public static float time; // seconds
-	
+    public static bool AtQA = false;
+
 	public static string GameTitle;
 	public static Texture2D ArtTexture;
 	public static AudioClip[] AudioSounds;
@@ -31,6 +32,12 @@ public class MainGame : MonoBehaviour {
 
     void Start()
     {
+        if (CodeQuality > 0 && AudioQuality > 0 && DesignQuality > 0 && ArtQuality > 0 && !AtQA)
+        {
+            AtQA = true;
+            Application.LoadLevel("QAScene");
+        }
+
         if (manager == null)
         {
             manager = this.gameObject;
