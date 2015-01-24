@@ -13,7 +13,9 @@ public class imagething : MonoBehaviour {
 	Image img;
 	int g=0;
 	float total=0;
-	float good=0;
+	float hit=0;
+	float linemiss=0;
+	float outside=0;
 	int timer=0;
 	
 	// Use this for initialization
@@ -23,11 +25,13 @@ public class imagething : MonoBehaviour {
 		
 		clear (a,Color.white);
 		clear (b,Color.white);
-		
-		//		a[0,2]=Color.red;
-		//		a[1,2]=Color.red;
-		//		a[2,2]=Color.red;
-		//		a[2,1]=Color.red;
+
+		for(int i=0;i<2;i++) {
+			for(float t=0f;t<1f;t+=0.01f) {
+				Vector3 p = Vector3.Lerp(new Vector3(100+i,100,0),new Vector3(200+i,200,0),t);
+				a[(int)p.y,(int)p.x]=Color.red;
+			}
+		}
 		
 		//		randomize(a,Color.red,Color.white);
 		//		for(int i=0;i<SIZE;i++) {
@@ -53,14 +57,23 @@ public class imagething : MonoBehaviour {
 	}
 	
 	bool itsdown=false;
+	bool itusedtobedown=false;
+	bool rmbdown=false;
+	bool rmbusedtobedown=false;
 	Vector3 adjm2last=new Vector3(999,0,0);
 	
 	void Update() {
 		if(Input.GetMouseButtonDown(0)) {
 			itsdown=true;
 		}
+		if(Input.GetMouseButtonDown(1)) {
+			rmbdown=true;
+		}
 		if(Input.GetMouseButtonUp(0)) {
 			itsdown=false;
+		}
+		if(Input.GetMouseButtonUp(1)) {
+			rmbdown=false;
 		}
 		//		GetComponent<Button>().
 		//	Debug.Log(Input.mousePosition.ToString());
@@ -74,17 +87,28 @@ public class imagething : MonoBehaviour {
 		if(adjm2last.x==999)
 			adjm2last=adjm2;
 		Vector3 newzero = new Vector3(m.x-r.width/2,m.y-r.height/2,0);
-		Debug.Log(adjm2);
+//		Debug.Log(itsdown);
+		Color paintcolor=Color.green;
 		if(itsdown) {
+			paintcolor = Color.blue;
+		}
+		if(rmbdown) {
+			paintcolor = Color.black;
+		}
+		if(itsdown||rmbdown) {
 			for(float t=0f;t<1f;t+=0.01f) {
 				Vector3 p = Vector3.Lerp(adjm2last,adjm2,t);
-				b[(int)p.y,(int)p.x]=Color.blue;
+				b[(int)p.y,(int)p.x]=(paintcolor.Equals(Color.black) ? a[(int)p.y,(int)p.x] : paintcolor);
 			}
-			b[(int)adjm2.y,(int)adjm2.x]=Color.blue;
 		}
 		adjm2last=adjm2;
 		//		c=addmatrix(a,b);
-		paint (b);	
+		if(itsdown||rmbdown) {
+			paint (b);
+//			Debug.Log("horf");
+		} else {
+//			Debug.Log("BLARG");
+		}
 		//		this.GetComponent<RectTransform>().
 	}
 	// Update is called once per frame
@@ -93,19 +117,36 @@ public class imagething : MonoBehaviour {
 		//		Debug.Log(Input.anyKeyDown);
 		//		if(!Input.GetKeyDown(KeyCode.Space))
 		//			return;
-		return;
-		if(timer++<2)
+//		return;
+//		if(timer++<1)
+//			return;
+//		Debug.Log(itusedtobedown+"\t"+itsdown);
+		if(itusedtobedown==itsdown&&rmbusedtobedown==rmbdown) {
 			return;
+		}
+		if((!itusedtobedown&&itsdown)||(!rmbusedtobedown&&rmbdown)) {
+			itusedtobedown=itsdown;
+			rmbusedtobedown=rmbdown;
+			return;
+		}
 		timer=0;
 		c=addmatrix(a,b);
 		paint (c);	
 		
+		hit=0;
+		linemiss=0;
+		outside=0;
+		total=SIZE*SIZE;
+
 		Color purple = new Color(0.5f,0f,0.5f);
 		for(int i=0;i<Mathf.Sqrt(c.Length);i++) {
 			for(int j=0;j<Mathf.Sqrt(c.Length);j++) {
-				if(c[i,j].Equals(purple)) { //|| c[i,j].Equals(Color.white)
-					d[i,j]=true;
-				}
+				if(c[i,j].Equals(Color.cyan))
+					hit++;
+				if(c[i,j].Equals(Color.red))
+					linemiss++;
+				if(c[i,j].Equals(Color.blue))
+					outside++;
 			}
 		}
 		
@@ -116,23 +157,16 @@ public class imagething : MonoBehaviour {
 		//		printme (c);
 		//		Debug.Log("\n");
 		//		printmeint (d);
+
+				Debug.Log("Total: "+total+"\tHit: "+hit+"\tMiss: "+linemiss+"\tOutside: "+outside+"\tPass: "+(3f*hit-outside>0&&linemiss<150));
 		
-		good=0;
-		total=0;
-		
-		foreach(bool i in d) {
-			if(i)
-				good++;
-			total++;
-		}
-		
-		//		Debug.Log("Accuracy: "+good/total);
-		
+		itusedtobedown=itsdown;
+		rmbusedtobedown=rmbdown;
 		
 	}
 	
 	void OnDestroy() {
-		//		paint(b);
+		clear(c,Color.white);
 	}
 	
 	public void paint(Color[,] r) {
@@ -143,9 +177,9 @@ public class imagething : MonoBehaviour {
 		Color[] alt = new Color[r.Length];
 		int asdf=0;
 		foreach(Color i in r) {
-			alt[asdf++]=i;
+			alt[asdf++]=(i.Equals(Color.black) ? Color.clear : i);
 		}
-		Debug.Log (tex.width+" "+tex.height);
+//		Debug.Log (tex.width+" "+tex.height);
 		tex.SetPixels(alt);
 		tex.Apply();
 		
@@ -195,6 +229,7 @@ public class imagething : MonoBehaviour {
 	}
 	
 	public Color[,] addmatrix(Color[,] f, Color[,] g) {
+//		Color purple = new Color(0.5f,0f,0.5f);
 		Color[,] h = new Color[(int) Mathf.Sqrt(f.Length),(int) Mathf.Sqrt(f.Length)];
 		for(int i=0;i<Mathf.Sqrt(h.Length);i++) {
 			for(int j=0;j<Mathf.Sqrt(h.Length);j++) {
@@ -202,8 +237,12 @@ public class imagething : MonoBehaviour {
 				//				h[i,j]=Color.white;
 				if(h[i,j].Equals(new Color(0.5f,0.5f,0.5f)))
 					h[i,j]=Color.white;
+				if(h[i,j].Equals(new Color(0.5f,0f,0f)))
+					h[i,j]=Color.red;
 				if(h[i,j].Equals(new Color(0.5f,0.5f,1f)))
 					h[i,j]=Color.blue;
+				if(h[i,j].Equals(new Color(0.5f,0f,0.5f)))
+					h[i,j]=Color.cyan;
 			}
 		}
 		return h;
