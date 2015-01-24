@@ -91,6 +91,7 @@ public class MainGame : MonoBehaviour {
     void OnGUI()
     {
         Tick();
+
         //if (true)//Application.loadedLevel == "GameMenuScene")
         //{
         //    if (GUI.Button(new Rect(Screen.width * 0.33f, Screen.height * 0.33f, Screen.width * 0.33f, Screen.height * 0.33f), "DESIGN"))
