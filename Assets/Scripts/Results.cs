@@ -50,7 +50,12 @@ public class Results : MonoBehaviour {
         MainGame.AudioQuality = 0;
         MainGame.DesignQuality = 0;
         MainGame.QualityQuality = 0;
+        MainGame.goingToResults = false;
+        MainGame.resultsTime = 0;
+        MainGame.MusicSource.time = 0;
         MainGame.AtQA = false;
+        MainGame.time = 48f;
+        MainGame.manager = null;
         Application.LoadLevel("StartMenuScene");
     }
 }
