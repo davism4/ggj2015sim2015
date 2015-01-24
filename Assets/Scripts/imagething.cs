@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class imagething : MonoBehaviour {
 	
 	static int SIZE = 256;
-
+	
 	Color[,] a = new Color[SIZE,SIZE];
 	Color[,] b = new Color[SIZE,SIZE];
 	Color[,] c = new Color[SIZE,SIZE];
@@ -15,46 +15,46 @@ public class imagething : MonoBehaviour {
 	float total=0;
 	float good=0;
 	int timer=0;
-
+	
 	// Use this for initialization
 	void Start () {
-
-//		Debug.Log(img.fillCenter);
-
+		
+		//		Debug.Log(img.fillCenter);
+		
 		clear (a,Color.white);
 		clear (b,Color.white);
-
-//		a[0,2]=Color.red;
-//		a[1,2]=Color.red;
-//		a[2,2]=Color.red;
-//		a[2,1]=Color.red;
-
+		
+		//		a[0,2]=Color.red;
+		//		a[1,2]=Color.red;
+		//		a[2,2]=Color.red;
+		//		a[2,1]=Color.red;
+		
 		//		randomize(a,Color.red,Color.white);
-//		for(int i=0;i<SIZE;i++) {
-//			for(int j=70;j<99;j++) {
-//				a[j,i]=Color.red;
-//			}
-//		}
+		//		for(int i=0;i<SIZE;i++) {
+		//			for(int j=70;j<99;j++) {
+		//				a[j,i]=Color.red;
+		//			}
+		//		}
 		b=(Color[,]) a.Clone();
-//		randomize (b,Color.blue,Color.black);
-
-//		b[0,0]=Color.blue;
-//		b[0,1]=Color.blue;
-//		b[1,0]=Color.blue;
-//		b[2,0]=Color.blue;
-//		b[2,1]=Color.blue;
-//		b[2,2]=Color.blue;
-
+		//		randomize (b,Color.blue,Color.black);
+		
+		//		b[0,0]=Color.blue;
+		//		b[0,1]=Color.blue;
+		//		b[1,0]=Color.blue;
+		//		b[2,0]=Color.blue;
+		//		b[2,1]=Color.blue;
+		//		b[2,2]=Color.blue;
+		
 		c=addmatrix(a,b);
-
+		
 		paint (c);	
-
-
+		
+		
 	}
-
+	
 	bool itsdown=false;
 	Vector3 adjm2last=new Vector3(999,0,0);
-
+	
 	void Update() {
 		if(Input.GetMouseButtonDown(0)) {
 			itsdown=true;
@@ -62,9 +62,9 @@ public class imagething : MonoBehaviour {
 		if(Input.GetMouseButtonUp(0)) {
 			itsdown=false;
 		}
-//		GetComponent<Button>().
-//	Debug.Log(Input.mousePosition.ToString());
-
+		//		GetComponent<Button>().
+		//	Debug.Log(Input.mousePosition.ToString());
+		
 		Rect r = GameObject.Find("Canvas").GetComponent<RectTransform>().rect;
 		Vector3 m = Input.mousePosition;
 		Vector3 adjm = new Vector3(m.x/r.width,m.y/r.height,0)*SIZE;
@@ -83,23 +83,23 @@ public class imagething : MonoBehaviour {
 			b[(int)adjm2.y,(int)adjm2.x]=Color.blue;
 		}
 		adjm2last=adjm2;
-//		c=addmatrix(a,b);
+		//		c=addmatrix(a,b);
 		paint (b);	
-//		this.GetComponent<RectTransform>().
+		//		this.GetComponent<RectTransform>().
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
-//		Input.
+		//		Input.
 		//		Debug.Log(Input.anyKeyDown);
-//		if(!Input.GetKeyDown(KeyCode.Space))
-//			return;
+		//		if(!Input.GetKeyDown(KeyCode.Space))
+		//			return;
 		return;
 		if(timer++<2)
 			return;
 		timer=0;
 		c=addmatrix(a,b);
 		paint (c);	
-
+		
 		Color purple = new Color(0.5f,0f,0.5f);
 		for(int i=0;i<Mathf.Sqrt(c.Length);i++) {
 			for(int j=0;j<Mathf.Sqrt(c.Length);j++) {
@@ -116,25 +116,25 @@ public class imagething : MonoBehaviour {
 		//		printme (c);
 		//		Debug.Log("\n");
 		//		printmeint (d);
-
+		
 		good=0;
 		total=0;
-
+		
 		foreach(bool i in d) {
 			if(i)
 				good++;
 			total++;
 		}
 		
-//		Debug.Log("Accuracy: "+good/total);
-
-
+		//		Debug.Log("Accuracy: "+good/total);
+		
+		
 	}
-
+	
 	void OnDestroy() {
-//		paint(b);
+		//		paint(b);
 	}
-
+	
 	public void paint(Color[,] r) {
 		img = this.gameObject.GetComponent<Image>();
 		Texture2D tex = img.sprite.texture;
@@ -160,7 +160,7 @@ public class imagething : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	public void randomize(Color[,] r, Color v, Color w) {
 		for(int i=0;i<Mathf.Sqrt(r.Length);i++) {
 			for(int j=0;j<Mathf.Sqrt(r.Length);j++) {
@@ -171,7 +171,7 @@ public class imagething : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	public void printme(Color[,] hihi) {
 		string bob="";
 		for(int i=0;i<Mathf.Sqrt(hihi.Length);i++) {
@@ -182,7 +182,7 @@ public class imagething : MonoBehaviour {
 		}
 		Debug.Log(bob);
 	}
-
+	
 	public void printmeint(bool[,] hihi) {
 		string bob="";
 		for(int i=0;i<Mathf.Sqrt(hihi.Length);i++) {
@@ -193,13 +193,13 @@ public class imagething : MonoBehaviour {
 		}
 		Debug.Log(bob);
 	}
-
+	
 	public Color[,] addmatrix(Color[,] f, Color[,] g) {
 		Color[,] h = new Color[(int) Mathf.Sqrt(f.Length),(int) Mathf.Sqrt(f.Length)];
 		for(int i=0;i<Mathf.Sqrt(h.Length);i++) {
 			for(int j=0;j<Mathf.Sqrt(h.Length);j++) {
 				h[i,j]=(f[i,j]+g[i,j])/2f;
-//				h[i,j]=Color.white;
+				//				h[i,j]=Color.white;
 				if(h[i,j].Equals(new Color(0.5f,0.5f,0.5f)))
 					h[i,j]=Color.white;
 				if(h[i,j].Equals(new Color(0.5f,0.5f,1f)))
