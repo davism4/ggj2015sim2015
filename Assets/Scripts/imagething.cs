@@ -58,14 +58,22 @@ public class imagething : MonoBehaviour {
 	
 	bool itsdown=false;
 	bool itusedtobedown=false;
+	bool rmbdown=false;
+	bool rmbusedtobedown=false;
 	Vector3 adjm2last=new Vector3(999,0,0);
 	
 	void Update() {
 		if(Input.GetMouseButtonDown(0)) {
 			itsdown=true;
 		}
+		if(Input.GetMouseButtonDown(1)) {
+			rmbdown=true;
+		}
 		if(Input.GetMouseButtonUp(0)) {
 			itsdown=false;
+		}
+		if(Input.GetMouseButtonUp(1)) {
+			rmbdown=false;
 		}
 		//		GetComponent<Button>().
 		//	Debug.Log(Input.mousePosition.ToString());
@@ -80,16 +88,22 @@ public class imagething : MonoBehaviour {
 			adjm2last=adjm2;
 		Vector3 newzero = new Vector3(m.x-r.width/2,m.y-r.height/2,0);
 //		Debug.Log(itsdown);
+		Color paintcolor=Color.green;
 		if(itsdown) {
+			paintcolor = Color.blue;
+		}
+		if(rmbdown) {
+			paintcolor = Color.black;
+		}
+		if(itsdown||rmbdown) {
 			for(float t=0f;t<1f;t+=0.01f) {
 				Vector3 p = Vector3.Lerp(adjm2last,adjm2,t);
-				b[(int)p.y,(int)p.x]=Color.blue;
+				b[(int)p.y,(int)p.x]=(paintcolor.Equals(Color.black) ? a[(int)p.y,(int)p.x] : paintcolor);
 			}
-			b[(int)adjm2.y,(int)adjm2.x]=Color.blue;
 		}
 		adjm2last=adjm2;
 		//		c=addmatrix(a,b);
-		if(itsdown) {
+		if(itsdown||rmbdown) {
 			paint (b);
 //			Debug.Log("horf");
 		} else {
@@ -107,11 +121,12 @@ public class imagething : MonoBehaviour {
 //		if(timer++<1)
 //			return;
 //		Debug.Log(itusedtobedown+"\t"+itsdown);
-		if(itusedtobedown==itsdown) {
+		if(itusedtobedown==itsdown&&rmbusedtobedown==rmbdown) {
 			return;
 		}
-		if(!itusedtobedown&&itsdown) {
+		if((!itusedtobedown&&itsdown)||(!rmbusedtobedown&&rmbdown)) {
 			itusedtobedown=itsdown;
+			rmbusedtobedown=rmbdown;
 			return;
 		}
 		timer=0;
@@ -146,6 +161,7 @@ public class imagething : MonoBehaviour {
 				Debug.Log("Total: "+total+"\tHit: "+hit+"\tMiss: "+linemiss+"\tOutside: "+outside+"\tPass: "+(3f*hit-outside>0&&linemiss<150));
 		
 		itusedtobedown=itsdown;
+		rmbusedtobedown=rmbdown;
 		
 	}
 	
@@ -161,7 +177,7 @@ public class imagething : MonoBehaviour {
 		Color[] alt = new Color[r.Length];
 		int asdf=0;
 		foreach(Color i in r) {
-			alt[asdf++]=i;
+			alt[asdf++]=(i.Equals(Color.black) ? Color.clear : i);
 		}
 //		Debug.Log (tex.width+" "+tex.height);
 		tex.SetPixels(alt);
@@ -221,6 +237,8 @@ public class imagething : MonoBehaviour {
 				//				h[i,j]=Color.white;
 				if(h[i,j].Equals(new Color(0.5f,0.5f,0.5f)))
 					h[i,j]=Color.white;
+				if(h[i,j].Equals(new Color(0.5f,0f,0f)))
+					h[i,j]=Color.red;
 				if(h[i,j].Equals(new Color(0.5f,0.5f,1f)))
 					h[i,j]=Color.blue;
 				if(h[i,j].Equals(new Color(0.5f,0f,0.5f)))
