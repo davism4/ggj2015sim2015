@@ -14,6 +14,7 @@ public class MainGame : MonoBehaviour {
     public static float ArtQuality = 0;
     public static float AudioQuality = 0;
     public static float DesignQuality = 0;
+    public static float QualityQuality = 0;
 	
 	public static int IndexSceneStart = 0;
     public static int IndexSceneInstructions = 1;
