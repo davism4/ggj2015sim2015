@@ -21,8 +21,6 @@ public class MainGame : MonoBehaviour {
     public static float AudioQuality = 0;
     public static float DesignQuality = 0;
     public static float QualityQuality = 0;
-	
-	public static float QualityQuality = 0;
 
     void Start()
     {
@@ -35,6 +33,7 @@ public class MainGame : MonoBehaviour {
         if (manager == null)
         {
             manager = this.gameObject;
+            StartGame();
             MusicSource = GetComponent<AudioSource>();
             MusicSource.Play();
         }
@@ -93,24 +92,5 @@ public class MainGame : MonoBehaviour {
     void OnGUI()
     {
         Tick();
-        if (true)//Application.loadedLevel == "GameMenuScene")
-        {
-            if (GUI.Button(new Rect(Screen.width * 0.33f, Screen.height * 0.33f, Screen.width * 0.33f, Screen.height * 0.33f), "DESIGN"))
-            {
-                Application.LoadLevel("DesignScene");
-            }
-            else if (GUI.Button(new Rect(Screen.width * 0.66f, Screen.height * 0.33f, Screen.width * 0.33f, Screen.height * 0.33f), "CODE"))
-            {
-                Application.LoadLevel("CodeScene");
-            }
-            else if (GUI.Button(new Rect(Screen.width * 0.33f, Screen.height * 0.66f, Screen.width * 0.33f, Screen.height * 0.33f), "ART"))
-            {
-                Application.LoadLevel("ArtScene");
-            }
-            else if (GUI.Button(new Rect(Screen.width * 0.66f, Screen.height * 0.66f, Screen.width * 0.33f, Screen.height * 0.33f), "MUSIC"))
-            {
-                Application.LoadLevel("MusicScene");
-            }
-        }
     }
 }
