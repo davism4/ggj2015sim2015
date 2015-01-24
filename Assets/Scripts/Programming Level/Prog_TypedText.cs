@@ -21,7 +21,7 @@ public class Prog_TypedText : MonoBehaviour {
 
         public Node head;
         public Node current;
-        public int currentIndex;
+        public int pointerIndex;
         public Node pointer;
         public bool bad;
 
@@ -30,7 +30,7 @@ public class Prog_TypedText : MonoBehaviour {
             head = null;
             current = null;
             pointer = null;
-            currentIndex = 0;
+            pointerIndex = 0;
             bad = false;
         }
 
@@ -48,7 +48,6 @@ public class Prog_TypedText : MonoBehaviour {
                 current.next.prev = current;
                 current = current.next;
             }
-            currentIndex++;
         }
 
         public char Remove()
@@ -60,7 +59,6 @@ public class Prog_TypedText : MonoBehaviour {
                 if (head == current)
                     head = null;
                 current = current.prev;
-                currentIndex--;
                 if (current != null)
                 {
                     current.next = null;
@@ -74,6 +72,8 @@ public class Prog_TypedText : MonoBehaviour {
     public static string ToType;
 
     public GameObject TypeThis;
+    public Color GoodColor;
+    public Color BadColor;
 
     private Text text;
     private LinkedList needToType;
@@ -105,18 +105,55 @@ public class Prog_TypedText : MonoBehaviour {
         if (e.type == EventType.KeyDown)
         {
             KeyCode k = e.keyCode;
-            Debug.Log(k.ToString());
             if (e.keyCode != KeyCode.None)
             {
                 if (e.keyCode == KeyCode.Backspace)
                 {
+                    if (current.head == null)
+                    {
+                        current.pointer = null;
+                        current.pointerIndex = 0;
+                        needToType.pointer = needToType.head;
+                        needToType.pointerIndex = 0;
+                        return;
+                    }
+
+                    if (!current.bad)
+                    {
+                        // Autobackspace whitespace
+                        while (needToType.pointer.value == ' ' || needToType.pointer.value == '\n' || needToType.pointer.value == '\t')
+                        {
+                            needToType.pointer = needToType.pointer.prev;
+                            needToType.pointerIndex--;
+                        }
+                        needToType.pointer = needToType.pointer.prev;
+                        needToType.pointerIndex--;
+                    }
+
+                    // Check if pointers line up again and set "bad" to false if it's fixed
+                    if (current.pointerIndex <= needToType.pointerIndex)
+                    {
+                        if (current.bad)
+                        {
+                            current.bad = false;
+                            text.color = GoodColor;
+                        }
+                    }
+
+                    // Autobackspace whitespace
+                    while (current.pointer.value == ' ' || current.pointer.value == '\n' || current.pointer.value == '\t')
+                    {
+                        current.Remove();
+                        text.text = text.text.Substring(0, text.text.Length - 1);
+                        current.pointer = current.pointer.prev;
+                        current.pointerIndex--;
+                    }
+
                     // Remove string last character from typed string
                     current.Remove();
                     text.text = text.text.Substring(0, text.text.Length - 1);
-
-                    // Remove autobackspace whitespace
-
-                    // Check if pointers line up again and set "bad" to false if it's fixed
+                    current.pointer = current.pointer.prev;
+                    current.pointerIndex--;
                 }
                 else if (e.keyCode == KeyCode.Space || e.keyCode == KeyCode.Tab || e.keyCode == KeyCode.Return)
                 {
@@ -157,7 +194,10 @@ public class Prog_TypedText : MonoBehaviour {
                     {
                         current.Add(result);
                         if (current.head != current.current)
+                        {
                             current.pointer = current.pointer.next;
+                            current.pointerIndex++;
+                        }
                         text.text += result;
 
                         // Check if linked list matches
@@ -166,27 +206,34 @@ public class Prog_TypedText : MonoBehaviour {
                             if (needToType.pointer.value == current.pointer.value)
                             {
                                 needToType.pointer = needToType.pointer.next;
+                                needToType.pointerIndex++;
                                 if (needToType.pointer == null)
                                 {
                                     Debug.Log("YOU WIN");
+                                    return;
+                                }
+
+                                while (needToType.pointer.value == ' ' || needToType.pointer.value == '\n' || needToType.pointer.value == '\t')
+                                {
+                                    current.Add(needToType.pointer.value);
+                                    text.text += needToType.pointer.value;
+                                    current.pointer = current.pointer.next;
+                                    current.pointerIndex++;
+                                    needToType.pointer = needToType.pointer.next;
+                                    needToType.pointerIndex++;
                                 }
                             }
                             else
                             {
                                 current.bad = true;
+                                text.color = BadColor;
                             }
-                        }
-
-                        while (needToType.pointer.value == ' ' || needToType.pointer.value == '\n' || needToType.pointer.value == '\t')
-                        {
-                            current.Add(needToType.pointer.value);
-                            text.text += needToType.pointer.value;
-                            current.pointer = current.pointer.next;
-                            needToType.pointer = needToType.pointer.next;
                         }
                     }
                 }
             }
+
+//            Debug.Log("Current index: " + current.pointerIndex + "   NeedToType index: " + needToType.pointerIndex + "   Current pointer value: " + current.pointer.value + "   NeedToType pointer value: " + needToType.pointer.value);
         }
     }
 }
