@@ -21,11 +21,6 @@ public class DesignLevelPlayer : MonoBehaviour
 		DontDestroyOnLoad(transform.gameObject);
     }
 
-    void OnGUI()
-    {
-        MainGame.Tick();
-    }
-
     void Start()
     {
 		WordCount	= 0;
