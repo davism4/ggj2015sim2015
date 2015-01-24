@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class DesignLevelPlayer : MonoBehaviour
 {
     // Player object
@@ -11,6 +12,8 @@ public class DesignLevelPlayer : MonoBehaviour
     public int GoodWordCount;
     public float moveSpeed = 2f;
 
+    public string title;
+
     // Other
     MainGame mainGame;
 
@@ -18,6 +21,7 @@ public class DesignLevelPlayer : MonoBehaviour
     {
         transform = GetComponent<Transform>();
         rigidbody2D = GetComponent<Rigidbody2D>();
+        
         mainGame = GameObject.FindGameObjectWithTag("GameController").GetComponent<MainGame>();
         WordCount = 0;
         GoodWordCount = 0;
@@ -25,32 +29,36 @@ public class DesignLevelPlayer : MonoBehaviour
 
 	void Update()
     {
-        if (WordCount == 3)
+        title = MainGame.GameTitle;
+        
+        float horizontal = Input.GetAxis("Horizontal");
+        if (horizontal > 0f)
         {
-           MainGame.DesignQuality = ((float)GoodWordCount)/ WordCount;
-           Application.LoadLevel("MainGameScene");
+            rigidbody2D.velocity = Vector2.right * moveSpeed;
+        }
+        else if (horizontal < 0f)
+        {
+            rigidbody2D.velocity = -Vector2.right * moveSpeed;
         }
         else
         {
-            float horizontal = Input.GetAxis("Horizontal");
-            if (horizontal>0f)
-            {
-                rigidbody2D.velocity = Vector2.right * moveSpeed;
-            }
-            else if (horizontal<0f)
-            {
-                rigidbody2D.velocity = -Vector2.right * moveSpeed;
-            }
-            else
-            {
-            	rigidbody2D.velocity = Vector2.zero;
-            }
+            rigidbody2D.velocity = Vector2.zero;
         }
        
     }
 
-    void OnCollisionEnter2D(Collision2D other)
+    void LateUpdate()
     {
+        if (WordCount == 3)
+        {
+            MainGame.DesignQuality = ((float)GoodWordCount) / WordCount;
+            Application.LoadLevel(MainGame.IndexSceneGameMenu);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        
         if (WordCount < 3 && other.gameObject.CompareTag("DesignIdea"))
         {
             DesignIdea d = other.gameObject.GetComponent<DesignIdea>();
@@ -58,12 +66,13 @@ public class DesignLevelPlayer : MonoBehaviour
             WordCount++;
             if (WordCount == 3)
             {
-                MainGame.GameTitle += d.Word + " ";
+                MainGame.GameTitle += d.Word;
             }
             else
             {
-                MainGame.GameTitle += d.Word;
+                MainGame.GameTitle += d.Word + " ";
             }
+            Destroy(d.gameObject);
         }
     }
 }
