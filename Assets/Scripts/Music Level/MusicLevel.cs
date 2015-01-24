@@ -5,20 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class MusicLevel : MonoBehaviour
 {
-    public static GameObject[] iconTypes;
-    public static GameObject[] buttons;
+    public SpriteRenderer[] topRenderers; // good/bad picture
+    public SpriteRenderer[] instrumentRenderers; // instrument picture
 
-    public enum Instrument { Drum, Bell, Guitar, Trumpet };
-    public static AudioClip ClipDrum;
-    public static AudioClip ClipTrumpet;
-    public static AudioClip ClipBell;
-    public static AudioClip ClipGuitar;
+    public AudioClip[] Clips = new AudioClip[4];
+    public Sprite[] InsturmentSprites = new Sprite[4];
+    public Sprite[] MarkSprites = new Sprite[2];
 
     int Length;
-    Vector3[] positions;
-    InstrumentCorrect[] instrumentsCorrect;
-    Instrument[] patternCorrect;
-    Instrument[] patternEntered;
+
+    bool[] correct;
+    int[] patternCorrect;
+    int[] patternEntered;
 
     int numPlayed;
     int numEntered;
@@ -32,8 +30,18 @@ public class MusicLevel : MonoBehaviour
             MainGame.AudioSounds[numEntered] = i.audioSource.clip;
             i.audioSource.PlayOneShot(i.audioSource.clip);
             patternEntered[numEntered] = i.instrumentType;
+            correct[numEntered] = (bool)(patternCorrect[numEntered] == patternEntered[numEntered]);
+            
+            topRenderers[numEntered].sprite = MarkSprites[correct[numEntered] ? 0 : 1];
+
+            Debug.Log("Entered " + i.ToString() + ": " + correct[numEntered].ToString());
             numEntered++;
         }
+    }
+
+    void PlayInstrument()
+    {
+        numPlayed++;
     }
 
     void SetMusicQuiet()
@@ -50,28 +58,43 @@ public class MusicLevel : MonoBehaviour
         SetMusicQuiet();
     }
 
-    void Awake() // once
+    void SetPattern()
     {
-        //Transform[] children = transform.GetComponentsInChildren<Transform>();
-        Length = transform.childCount;
-        positions = new Vector3[Length];
-        patternCorrect = new Instrument[Length];
-        patternEntered = new Instrument[Length];
-        instrumentsCorrect = new InstrumentCorrect[Length];
         for (int i = 0; i < Length; i++)
         {
-            positions[i] = transform.GetChild(i).position;
+            int r = UnityEngine.Random.Range(0, 4);
+            patternCorrect[i] = r;
+            instrumentRenderers[i].sprite = InsturmentSprites[r];
         }
-        //SoundTypes	= Resources.LoadAll<AudioClip>("Sound");
-        //Instruments	= Resources.LoadAll<Texture2D>("Art/Instruments");
-        MainGame.AudioSounds = new AudioClip[Length];
-        DontDestroyOnLoad(transform.gameObject);
     }
+    
+    void Awake() // once
+    {
+        GameObject[] nodes = GameObject.FindGameObjectsWithTag("MusicNode");
+        Length = nodes.Length;
+        Transform[] children = new Transform[Length];
+        children[0] = transform.Find("MusicNode 0");
+        children[1] = transform.Find("MusicNode 1");
+        children[2] = transform.Find("MusicNode 2");
+        children[3] = transform.Find("MusicNode 3");
+        //child = new Transform[transform.childCount];
+        
+        topRenderers = new SpriteRenderer[Length];
+        instrumentRenderers = new SpriteRenderer[Length];
+        patternCorrect = new int[Length];
+        patternEntered = new int[Length];
+        correct = new bool[Length];
+        
+        for (int i = 0; i < Length; i++)
+        {
+            instrumentRenderers[i] = children[i].GetComponent<SpriteRenderer>();
+            topRenderers[i] = instrumentRenderers[i].transform.GetChild(0).GetComponent<SpriteRenderer>();
+        }
 
-    //void OnGUI()
-    //{
-    //    MainGame.Tick();
-    //}
+        MainGame.AudioSounds = new AudioClip[Length];
+        //DontDestroyOnLoad(transform.gameObject);
+        SetPattern();
+    }
 
     void Start()
     {

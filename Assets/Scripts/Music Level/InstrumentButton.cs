@@ -7,7 +7,7 @@ using UnityEngine;
 public class InstrumentButton : MonoBehaviour
 {
     public AudioSource audioSource;
-    public MusicLevel.Instrument instrumentType;
+    public int instrumentType;
 
     Rect rect;
     Texture texture;
@@ -29,21 +29,9 @@ public class InstrumentButton : MonoBehaviour
         );
         texture = GetComponent<SpriteRenderer>().sprite.texture;
         musiclevel = GameObject.FindObjectOfType<MusicLevel>();
-        switch (instrumentType)
-        {
-            case MusicLevel.Instrument.Bell:
-                audioSource.clip = MusicLevel.ClipBell;
-                break;
-            case MusicLevel.Instrument.Drum:
-                audioSource.clip = MusicLevel.ClipDrum;
-                break;
-            case MusicLevel.Instrument.Guitar:
-                audioSource.clip = MusicLevel.ClipGuitar;
-                break;
-            default:
-                audioSource.clip = MusicLevel.ClipTrumpet;
-                break;
-        }
+
+        audioSource.clip = musiclevel.Clips[instrumentType];
+
         //GetComponent<SpriteRenderer>().enabled = false;
         //rect = new Rect(0, 0, 90, 90);
         //rect = GetComponent<GUITexture>().GetScreenRect();
@@ -58,7 +46,7 @@ public class InstrumentButton : MonoBehaviour
         if (Application.loadedLevelName=="MusicScene")
         if (GUI.Button(rect, texture))
         {
-            Debug.Log("Clicked the button with text");
+            musiclevel.EnterSound(this);
         }
     }
 
