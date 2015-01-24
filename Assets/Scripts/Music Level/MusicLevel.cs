@@ -39,18 +39,9 @@ public class MusicLevel : MonoBehaviour
         }
     }
 
-    void SetMusicQuiet()
-    {
-
-    }
-
-    void SetMusicLoud()
-    {
-    }
-
     void OnDisable()
     {
-        SetMusicQuiet();
+        MainGame.MusicSource.volume = 1f;
     }
 
     void SetPattern()
@@ -98,11 +89,12 @@ public class MusicLevel : MonoBehaviour
         numEntered = 0;
         playIndex = 0;
         instrumentTimer = 0;
+        MainGame.MusicSource.volume = 0.25f;
     }
 
     void Update()
     {
-        if (playIndex < 4)
+        if (playIndex <= 4)
         {
             if (instrumentTimer > 0f)
             {
@@ -112,15 +104,17 @@ public class MusicLevel : MonoBehaviour
             {
                 instrumentTimer = 1.0f;
                 audio.Stop();
-                audio.PlayOneShot(Clips[patternCorrect[playIndex]]);
                 if (playIndex > 0)
                 {
                     instrumentRenderers[playIndex-1].sprite = null;
                     
                 }
-                instrumentRenderers[playIndex].sprite = InsturmentSprites[4];//patternCorrect[playIndex]];
-                playIndex++;
-                
+                if (playIndex < 4)
+                {
+                    instrumentRenderers[playIndex].sprite = InsturmentSprites[4];//patternCorrect[playIndex]];
+                    audio.PlayOneShot(Clips[patternCorrect[playIndex]]);
+                    playIndex++;
+                }
             }
         }
         

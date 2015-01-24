@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DesignIdeaGenerator : MonoBehaviour
 {
-    public float GoodWordChance = 0.25f;
+    float GoodWordChance = 0.25f;
     float leftLimit;
     float rightLimit;
     float yLimit;
@@ -14,6 +14,8 @@ public class DesignIdeaGenerator : MonoBehaviour
     
     List<string> BadWords;
     List<string> GoodWords;
+
+    public Sprite[] sprites = new Sprite[2];
 
     void SetGoodWords()
     {
@@ -90,24 +92,24 @@ public class DesignIdeaGenerator : MonoBehaviour
     void CreateIdea()
     {
         string word;
-        bool good;
         Vector3 spawnpoint = new Vector3(UnityEngine.Random.Range(leftLimit, rightLimit), yLimit, 0f);
         GameObject body = (GameObject)Instantiate(DesignIdeaGameObject, spawnpoint, Quaternion.identity);
         if (UnityEngine.Random.Range(0f, 1f) > GoodWordChance)
         {
             word = BadWords[UnityEngine.Random.Range(0, BadWords.Count-1)];
-            good = false;
+            body.transform.GetComponent<DesignIdea>().SetWord(word, false);
+            body.transform.GetComponent<SpriteRenderer>().sprite = sprites[0];
             BadWords.Remove(word);
             if (BadWords.Count == 0) SetBadWords();
         }
         else
         {
             word = GoodWords[UnityEngine.Random.Range(0, GoodWords.Count-1)];
-            good = true;
+            body.transform.GetComponent<DesignIdea>().SetWord(word, true);
+            body.transform.GetComponent<SpriteRenderer>().sprite = sprites[1];
             GoodWords.Remove(word);
             if (GoodWords.Count == 0) SetGoodWords();
         }
-        body.GetComponent<DesignIdea>().SetWord (word, good);
     }
 
 }

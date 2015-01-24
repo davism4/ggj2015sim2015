@@ -26,10 +26,11 @@ public class DesignIdea : MonoBehaviour {
 	{
 		Word = w;
 		//text.text = Word;
-        if (good)
-        	renderer.material.color = Color.green;
-        else
-        	renderer.material.color = Color.red;
+        Good = good;
+        //if (good)
+        //    renderer.material.color = Color.green;
+        //else
+        //    renderer.material.color = Color.red;
 	}
 	
 	void Update ()

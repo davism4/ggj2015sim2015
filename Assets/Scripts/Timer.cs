@@ -33,7 +33,7 @@ public class Timer : MonoBehaviour {
     {
         float time = MainGame.time;
         float panicScale = 1 - time / 48;
-        text.text = time > 0f ? time.ToString("##.00") : "0.00";
+        text.text = time > 0f ? time.ToString("0.00") : "0.00";
         text.color = new Color(panicScale, 0, 0);
 
         if (expanding)

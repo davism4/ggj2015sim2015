@@ -49,7 +49,7 @@ public class DesignLevelPlayer : MonoBehaviour
     {
         if (WordCount == 3)
         {
-            MainGame.DesignQuality = ((float)GoodCount) / WordCount;
+            MainGame.DesignQuality = GoodCount / WordCount;
             Application.LoadLevel("GameMenuScene");
         }
     }
@@ -59,8 +59,10 @@ public class DesignLevelPlayer : MonoBehaviour
         if (WordCount < 3 && other.gameObject.CompareTag("DesignIdea"))
         {
             DesignIdea d = other.gameObject.GetComponent<DesignIdea>();
-            if (d.Good) GoodCount++;
+
+            if (d.Good) GoodCount += 1f;
             WordCount++;
+
             if (WordCount == 3)
             {
                 MainGame.GameTitle += d.Word;
