@@ -23,6 +23,7 @@ public class Prog_TypedText : MonoBehaviour {
         public Node current;
         public int currentIndex;
         public Node pointer;
+        public bool bad;
 
         public LinkedList()
         {
@@ -30,6 +31,7 @@ public class Prog_TypedText : MonoBehaviour {
             current = null;
             pointer = null;
             currentIndex = 0;
+            bad = false;
         }
 
         public void Add(char c)
@@ -89,13 +91,14 @@ public class Prog_TypedText : MonoBehaviour {
         }
         current = new LinkedList();
     }
-	
-	// Update is called once per frame
+
+    // Update is called once per frame
+    bool shiftPressed;
 	void Update () 
     {
+        shiftPressed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
 	}
 
-    bool shiftPressed;
     public void OnGUI()
     {
         Event e = Event.current;
@@ -107,29 +110,24 @@ public class Prog_TypedText : MonoBehaviour {
             {
                 if (e.keyCode == KeyCode.Backspace)
                 {
+                    // Remove string last character from typed string
                     current.Remove();
-                    text.text = text.text.Substring(0, text.text.Length - 2);
+                    text.text = text.text.Substring(0, text.text.Length - 1);
 
-                    // check for match
+                    // Remove autobackspace whitespace
+
+                    // Check if pointers line up again and set "bad" to false if it's fixed
                 }
-                else if (e.keyCode == KeyCode.Space || e.keyCode == KeyCode.Tab)
+                else if (e.keyCode == KeyCode.Space || e.keyCode == KeyCode.Tab || e.keyCode == KeyCode.Return)
                 {
                     // Ignore  
-                }
-                else if (e.keyCode == KeyCode.Return)
-                {
-                    // Add \n instead of KeyCode.Return
-                }
-                else if (e.keyCode == KeyCode.LeftShift || e.keyCode == KeyCode.RightShift)
-                {
-                    shiftPressed = true;
                 }
                 else
                 {
                     char result = '\0';
-                    string possibleKeys = "!@#$%^&*()";
+                    string possibleKeys = ")!@#$%^&*(";
                     if (e.keyCode.ToString().Contains("Alpha"))
-                        result = shiftPressed ? possibleKeys[int.Parse(e.keyCode.ToString().Replace("Alpha", "")) - 1] : e.keyCode.ToString().Replace("Alpha", "")[0];
+                        result = shiftPressed ? possibleKeys[int.Parse(e.keyCode.ToString().Replace("Alpha", "")) % 10] : e.keyCode.ToString().Replace("Alpha", "")[0];
                     else if (e.keyCode == KeyCode.BackQuote)
                         result = shiftPressed ? '~' : '`';
                     else if (e.keyCode == KeyCode.Minus)
@@ -157,19 +155,37 @@ public class Prog_TypedText : MonoBehaviour {
 
                     if (result != '\0')
                     {
-                        // Add result to string
-                        // Add result to linked list
+                        current.Add(result);
+                        if (current.head != current.current)
+                            current.pointer = current.pointer.next;
+                        text.text += result;
+
                         // Check if linked list matches
+                        if (!current.bad)
+                        {
+                            if (needToType.pointer.value == current.pointer.value)
+                            {
+                                needToType.pointer = needToType.pointer.next;
+                                if (needToType.pointer == null)
+                                {
+                                    Debug.Log("YOU WIN");
+                                }
+                            }
+                            else
+                            {
+                                current.bad = true;
+                            }
+                        }
+
+                        while (needToType.pointer.value == ' ' || needToType.pointer.value == '\n' || needToType.pointer.value == '\t')
+                        {
+                            current.Add(needToType.pointer.value);
+                            text.text += needToType.pointer.value;
+                            current.pointer = current.pointer.next;
+                            needToType.pointer = needToType.pointer.next;
+                        }
                     }
                 }
-            }
-        }
-        else if (e.type == EventType.KeyUp)
-        {
-            KeyCode k = e.keyCode;
-            if (e.keyCode == KeyCode.LeftShift || e.keyCode == KeyCode.RightShift)
-            {
-                shiftPressed = false;
             }
         }
     }
