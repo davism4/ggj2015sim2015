@@ -48,7 +48,34 @@ public class Reviews : MonoBehaviour
         subjects = new List<int>() { 0, 1, 2, 3 };
         verbs = new List<string>()
         {
-            "says", "said", "wrote", "writes", "blogged", "tweeted"
+            "commented", "comments", "says", "said", "wrote", "writes", "blogged", "tweeted",
+        };
+        prefixes = new List<string>()
+        {
+           "Audiences will like how the",
+           "Audiences will say that the",
+           "Critics say that the",
+           "Critics agree that the",
+           "I believe that the",
+           "I believe the",
+           "I feel that the",
+           "I feel the",
+           "I found that the",
+           "I think that the",
+           "I think the",
+           "I thought that the",
+           "I'd say that the",
+           "IGN says the",
+           "In my opinion, the",
+           "Its",
+           "Judges believe that the ",
+           "Judges said that the",
+           "Reviews agree that the",
+           "Reviewers say the",
+           "The",
+           "The game's",
+           "This game's",
+           "Unlike IGN, I think the",
         };
         terms_art = new List<string>()
         {
@@ -92,60 +119,67 @@ public class Reviews : MonoBehaviour
             "response time",
             "stability"
         };
-        prefixes = new List<string>()
-        {
-           "Critics say that the",
-           "I liked how the",
-           "I thought that the",
-           "I'd say the",
-           "IGN says the",
-           "In my opinion, the",
-           "Its",
-           "The",
-           "This game's",
-           "Your mom thinks that the",
-        };
         adverbs_low = new List<string>() {
-           "",
-           "a bit",
+           "", "", "", "",
+           "a bit", "almost", "arguably",
+           "fairly",
            "kind of",
-           "moderately",
-           "probably",
-           "slightly","somewhat",
+           "maybe", "marginally", "moderately", "more or less",
+           "occasionally",
+           "partially", "probably", "possibly",
+           "rather", "reasonably", "relatively",
+           "seemingly", "slightly", "somewhat",
         };
         adverbs_high = new List<string>() {
-           "arguably",
            "clearly",
            "definitely",
-           "incredibly",
+           "exceptionally", "extremely",
+           "greatly",
+           "immensely", "incredibly",
+           "notably",
+           "overly",
+           "quite",
+           "remarkably",
            "so",
+           "uncommonly", "undeniably",
            "very",
         };
         adjectives_good = new List<string>(){
-           "admirable",
-           "good","great",
-           "fantastic",
+           "acceptable", "admirable",
+           "creative",
+           "decent", "delightful",
+           "enjoyable", "excellent",
+           "good", "great",
+           "fantastic", "fun",
            "high-quality",
            "nice",
+           "okay",
            "pleasant",
-           "superb",
+           "satisfying", "sophisticated", "superb",
            "unique", 
-           "vivid",
-           "well done",
+           "valuable", "vivid",
+           "well done", "worthy",
         };
         adjectives_bad = new List<string>()
         {
-           "awful",
-           "bad",
-           "childish",
-           "distasteful",
-           "flawed",
-           "horrendous",
-           "mediocre",
+           "atrocious", "annoying", "awful",
+           "bad", "boring", "broken",
+           "cheap", "cheesy", "childish",
+           "depressing", "distasteful", "dreadful", "dull",
+           "flawed", "foul", "frustrating",
+           "hideous", "horrendous", "horrible",
+           "irritating",
+           "lame", "lousy",
+           "mediocre", "miserable",
+           "noxious",
+           "obscene", "offensive", "ordinary",
            "terrible",
-           "poor","poorly done",
-           "unpleasant",
+           "pathetic", "pitiable", "poor",
+           "repetitive", "rough",
+           "sad", "shabby", "sorry", "sub-par",
+           "uncreative", "unpleasant",
            "vile",
+           "worthless"
         };
     }
 
@@ -190,10 +224,10 @@ public class Reviews : MonoBehaviour
         // prefix + subject
         text += PullWord(prefixes)  + " " + subject + " ";
         if (subject[subject.Length - 1] == 's')
-            text += Chance(0.5f) ? "are " : "were ";
+            text += Chance(0.5f) ? "are" : "were";
         else
-            text += Chance(0.5f) ? "is " : "was ";
-        
+            text += Chance(0.5f) ? "is" : "was";
+        text += " ";
         // adverb
         if (quality <= 0.25f)
         {
@@ -211,7 +245,7 @@ public class Reviews : MonoBehaviour
         {
             text += PullWord(adverbs_high) + " " + PullWord(adjectives_good);
         }
-        text += Chance(.5f) ? "." : "!";
+        text += Chance(0.8f) ? "." : "!";
         text += "\" (" + (quality*10).ToString("0.0") + "/10)";
         return text;
     }
