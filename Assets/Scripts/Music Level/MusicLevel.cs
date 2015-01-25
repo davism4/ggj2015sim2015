@@ -6,38 +6,39 @@ using UnityEngine.UI;
 [RequireComponent(typeof(AudioSource))]
 public class MusicLevel : MonoBehaviour
 {
-    float MainMusicVolumeReduction = 0.3f;
-
-    public Image[] markImages; // good/bad picture
-    public Image[] instrumentImages; // instrument picture
-    new AudioSource audio;
-
     public AudioClip[] Clips = new AudioClip[4];
     public Sprite[] InsturmentSprites = new Sprite[5];
     public Sprite[] MarkSprites = new Sprite[2];
 
-    public int Length;
+    float MainMusicVolumeReduction = 0.3f;
+    
+    new AudioSource audio;
 
-    public bool[] correct;
-    public int[] patternCorrect;
-    public int[] patternEntered;
+    int Length;
+    bool[] correct;
+    int[] patternCorrect;
+    int[] patternEntered;
+    Image[] markImages; // good/bad picture
+    Image[] instrumentImages; // instrument picture
+    int numEntered;
+    int playIndex;
+    float instrumentTimer;
+    float clickdelay = 0f;
+    public bool CanClick { get { return (playIndex > 4) && (clickdelay <= 0f); } }
 
-    public int numEntered;
-    public int playIndex;
-    public float instrumentTimer;
-
-    public float clickdelay = 0f;
-    public bool CanClick { get { return (playIndex == 4) && (clickdelay <= 0f); } }
+    public GameObject[] buttons;
 
     public void EnterSound(InstrumentButton i)
     {
         if (numEntered < Length)
         {
-            MainGame.AudioSounds[numEntered] = i.audioSource.clip;
-            i.audioSource.PlayOneShot(i.audioSource.clip);
+            MainGame.AudioSounds[numEntered] = i.clip;
+            audio.clip = i.clip;
+            audio.Play();
             patternEntered[numEntered] = i.instrumentType;
             correct[numEntered] = (bool)(patternCorrect[numEntered] == patternEntered[numEntered]);
             instrumentImages[numEntered].enabled = true;
+            Debug.Log(patternCorrect[numEntered]);
             instrumentImages[numEntered].sprite = InsturmentSprites[patternCorrect[numEntered]];
             markImages[numEntered].enabled = true;
             markImages[numEntered].sprite = MarkSprites[correct[numEntered] ? 0 : 1];
@@ -83,10 +84,15 @@ public class MusicLevel : MonoBehaviour
         patternEntered = new int[Length];
         correct = new bool[Length];
 
+        //Button[] b = GameObject.FindObjectsOfType<Button>();
+        buttons = GameObject.FindGameObjectsWithTag("InstrumentButton");
+
         for (int i = 0; i < Length; i++)
         {
             instrumentImages[i] = children[i].GetComponent<Image>();
             markImages[i] = instrumentImages[i].transform.GetChild(0).GetComponent<Image>();
+            //buttons[i] = b[i].gameObject;
+            buttons[i].SetActive(false);
         }
 
         MainGame.AudioSounds = new AudioClip[Length];
@@ -127,9 +133,17 @@ public class MusicLevel : MonoBehaviour
                     instrumentImages[playIndex].enabled = true;
                     instrumentImages[playIndex].sprite = InsturmentSprites[4];//patternCorrect[playIndex]];
                     audio.PlayOneShot(Clips[patternCorrect[playIndex]]);
-                    playIndex++;
                 }
+                playIndex++;
             }
+        }
+        else if (playIndex == 5)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                buttons[i].SetActive(true);
+            }
+            playIndex++;
         }
         if (clickdelay >= 0f) clickdelay -= Time.deltaTime;
 
