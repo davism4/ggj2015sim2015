@@ -106,7 +106,7 @@ public class Prog_TypedText : MonoBehaviour {
 
     void OnDestroy()
     {
-        MainGame.CodeQuality = (float)goodWords / wordCount;
+        MainGame.CodeQuality = (float)goodWords / (wordCount-1);
     }
 
     private Text text;
