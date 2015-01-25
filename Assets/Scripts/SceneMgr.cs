@@ -9,12 +9,13 @@ public class SceneMgr : MonoBehaviour {
 
     void Awake()
     {
-        QAbutton.SetActive(false);
+        if (QAbutton != null)
+            QAbutton.SetActive(false);
     }
 
     void Update()
     {
-        if (!QAbutton.activeSelf)
+        if (QAbutton != null && !QAbutton.activeSelf)
         {
             if (MainGame.time > 0f &&
                 MainGame.CodeQuality > minimumPercentage &&
