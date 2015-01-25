@@ -9,8 +9,8 @@ public class DesignIdea : MonoBehaviour {
     public bool Good = true;
     [HideInInspector] public new Transform transform;
     float speed;
-    public float SpeedMin = 1.0f;
-	public float SpeedMax = 1.5f;
+    float SpeedMin = 2.50f;
+	float SpeedMax = 3.5f;
     public GUIStyle guiStyle;
 	
 	void Awake()

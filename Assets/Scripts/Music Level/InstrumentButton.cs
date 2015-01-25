@@ -43,10 +43,21 @@ public class InstrumentButton : MonoBehaviour
         //{
         //    Debug.Log("PRESSED BUTTON " + name);
         //}'
-        if (Application.loadedLevelName=="MusicScene")
-        if (GUI.Button(rect, texture))
+        if (Application.loadedLevelName == "MusicScene")
         {
-            musiclevel.EnterSound(this);
+            if (musiclevel.CanClick)
+            {
+                GUI.contentColor = Color.white;
+            }
+            else
+            {
+                GUI.contentColor = Color.gray;
+            }
+            if (GUI.Button(rect, texture))
+            {
+                if (musiclevel.CanClick)
+                    musiclevel.EnterSound(this);
+            }
         }
     }
 

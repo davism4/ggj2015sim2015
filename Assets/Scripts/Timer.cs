@@ -20,9 +20,11 @@ public class Timer : MonoBehaviour {
         {
             manager = this.gameObject;
         }
-        
-        if (this.gameObject != manager)
+
+        if (this.gameObject != manager || Application.loadedLevelName == "EndScene2")
+        {
             Destroy(this.gameObject);
+        }
         DontDestroyOnLoad(this.gameObject);
     }
 

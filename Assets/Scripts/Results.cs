@@ -10,8 +10,9 @@ public class Results : MonoBehaviour {
     public GameObject SoundText;
     public GameObject QAText;
     public GameObject GGButton;
+    public GameObject TitleText;
 
-    private Text design, art, code, sound, qa;
+    private Text design, art, code, sound, qa, title;
 
     private float delay;
 
@@ -23,6 +24,7 @@ public class Results : MonoBehaviour {
         code = CodeText.GetComponent<Text>();
         sound = SoundText.GetComponent<Text>();
         qa = QAText.GetComponent<Text>();
+        title = TitleText.GetComponent<Text>();
         delay = 0;
 	}
 	
