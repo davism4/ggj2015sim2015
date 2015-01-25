@@ -55,7 +55,6 @@ public class Results : MonoBehaviour {
         MainGame.goingToResults = false;
         MainGame.resultsTime = 0;
         MainGame.MusicSource.time = 0;
-        MainGame.AtQA = false;
         MainGame.time = 48f;
         Destroy(MainGame.manager.gameObject);
         MainGame.manager = null;

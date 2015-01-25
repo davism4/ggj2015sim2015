@@ -25,6 +25,7 @@ public class DesignLevelPlayer : MonoBehaviour
 		WordCount	= 0;
 		GoodCount	= 0f;
         MainGame.GameTitle = "";
+        MainGame.DesignQuality = 0f;
     }
 
 	void Update()
@@ -33,7 +34,6 @@ public class DesignLevelPlayer : MonoBehaviour
         if (horizontal > 0f)
         {
             float right = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x-1;
-            Debug.Log("Move: right=" + right);
             if (transform.position.x < right)
             {
                 transform.position += Vector3.right * moveSpeed * Time.deltaTime;
@@ -42,7 +42,6 @@ public class DesignLevelPlayer : MonoBehaviour
         else if (horizontal < 0f)
         {
             float left = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x+1;
-            Debug.Log("Move: left=" + left);
             if (transform.position.x > left)
             {
                 transform.position -= Vector3.right * moveSpeed * Time.deltaTime;

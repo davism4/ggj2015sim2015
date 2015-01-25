@@ -8,7 +8,6 @@ public class MainGame : MonoBehaviour {
 
 	public static float time; // seconds
 
-    public static bool AtQA = false;
     public static float resultsTime = 0f;
     public static bool goingToResults = false;
 
@@ -36,11 +35,6 @@ public class MainGame : MonoBehaviour {
 
     void Start()
     {
-        if (CodeQuality > 0 && AudioQuality > 0 && DesignQuality > 0 && ArtQuality > 0 && !AtQA)
-        {
-            AtQA = true;
-            Application.LoadLevel("QAScene");
-        }
         if (manager == null)
         {
             manager = this.gameObject;
@@ -48,8 +42,10 @@ public class MainGame : MonoBehaviour {
             MusicSource.Play();
             Reset();
         }
-        if (this.gameObject != manager)
+        else if (this.gameObject != manager)
+        {
             Destroy(this.gameObject);
+        }
         DontDestroyOnLoad(this.gameObject);
     }
 
@@ -58,6 +54,11 @@ public class MainGame : MonoBehaviour {
 
     void Update()
 	{
+        //if (time > 0f && time < 6f && CodeQuality > 0 && AudioQuality > 0 && DesignQuality > 0 && ArtQuality > 0)
+        //{
+        //    if (Application.loadedLevelName != "QAScene")
+        //        Application.LoadLevel("QAScene");
+        //}
         if (time > 0)
             time -= Time.deltaTime;
         else
