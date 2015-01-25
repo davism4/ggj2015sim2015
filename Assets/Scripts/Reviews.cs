@@ -120,7 +120,6 @@ public class Reviews : MonoBehaviour
             "stability"
         };
         adverbs_low = new List<string>() {
-           "", "", "", "",
            "a bit", "almost", "arguably",
            "fairly",
            "kind of",
