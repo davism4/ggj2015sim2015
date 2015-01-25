@@ -51,6 +51,12 @@ public class MusicLevel : MonoBehaviour
     {
         if (MainGame.MusicSource != null)
             MainGame.MusicSource.volume = 1f;
+        int c = 0;
+        for (int i = 0; i < Length; i++)
+        {
+            if (correct[i]) c++;
+        }
+        MainGame.AudioQuality = (float)c / Length;
     }
 
     void SetPattern()
