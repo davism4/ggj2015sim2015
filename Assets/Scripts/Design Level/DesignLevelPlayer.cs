@@ -12,12 +12,11 @@ public class DesignLevelPlayer : MonoBehaviour
     public float GoodCount;
     public float moveSpeed = 2f;
 
-    public string title;
-
     void Awake()
     {
         transform	= GetComponent<Transform>();
         rigidbody2D	= GetComponent<Rigidbody2D>();
+        
 		//DontDestroyOnLoad(transform.gameObject);
     }
 
@@ -25,11 +24,11 @@ public class DesignLevelPlayer : MonoBehaviour
     {
 		WordCount	= 0;
 		GoodCount	= 0f;
+        MainGame.GameTitle = "";
     }
 
 	void Update()
     {
-        title = MainGame.GameTitle;
         float horizontal = Input.GetAxis("Horizontal");
         if (horizontal > 0f)
         {

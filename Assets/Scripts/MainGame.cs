@@ -25,13 +25,12 @@ public class MainGame : MonoBehaviour {
 
     public void Reset()
     {
-        PlayerPrefs.SetString("GameTitle", "Game Title Here");
-        PlayerPrefs.SetFloat("time", 48f);
-        PlayerPrefs.SetInt("CodeQuality", 0);
-        PlayerPrefs.SetInt("ArtQuality", 0);
-        PlayerPrefs.SetInt("AudioQuality", 0);
-        PlayerPrefs.SetInt("DesignQuality", 0);
-        PlayerPrefs.SetInt("QualityQuality", 0);
+        GameTitle = "Your Title Here";
+        CodeQuality = 0;
+        ArtQuality = 0;
+        AudioQuality = 0;
+        DesignQuality = 0;
+        QualityQuality = 0;
         time = 48f;
     }
 
