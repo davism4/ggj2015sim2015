@@ -4,22 +4,10 @@ using UnityEngine.UI;
 
 public class Prog_TypedText : MonoBehaviour {
 
-    public static string[] Programs = new string[] {
-        "void Main() {\n\tnew Game().make();\n}",
-        "def main:\n\tprint \"pretend this is a game\"",
-        "void main()\n{\n\twhile(1) cout << \"lol\";\n}",
-        "void main()\n{\n\tPrayToGameJamGods();\n}",
-        "void Main() { throw new Exception(); }",
-        "(car (cdr 1 2) (+ 1 3))",
-        "public static void main(String[] args)  { ; }",
-        "if (q>5) boolean debug = false;",
-        "System.out.println(\"hello world\");",
-        "do { x += 2; } while (x<8);",
-        "Filesystem.destroy(\"system32\");",
-        "return GUI.do(\"Visual Basic\");",
-        "if (error):\n\tprint \"everything is fine\"",
-        "<html>this is a game</html>",
-        "if (y & z) \n{ \n\ty << 2; \n\treturn z; \n}"
+    public static string[] Words = new string[] {
+        "void", "import", "make_game()", "public", "class", "static", "string[]", "linkedlist", "system.out.println",
+        "integer", "float", "reference", "null", "boolean", "variable", "while", "x=14", "{};", "unityengine",
+        "system.collections"
     };
 
     public class LinkedList
@@ -38,18 +26,16 @@ public class Prog_TypedText : MonoBehaviour {
         }
 
         public Node head;
-        public Node current;
+        public Node tail;
         public int pointerIndex;
         public Node pointer;
-        public bool bad;
 
         public LinkedList()
         {
             head = null;
-            current = null;
+            tail = null;
             pointer = null;
             pointerIndex = 0;
-            bad = false;
         }
 
         public void Add(char c)
@@ -57,14 +43,14 @@ public class Prog_TypedText : MonoBehaviour {
             if (head == null)
             {
                 head = new Node(c);
-                current = head;
+                tail = head;
                 pointer = head;
             }
             else
             {
-                current.next = new Node(c);
-                current.next.prev = current;
-                current = current.next;
+                tail.next = new Node(c);
+                tail.next.prev = tail;
+                tail = tail.next;
             }
         }
 
@@ -74,13 +60,13 @@ public class Prog_TypedText : MonoBehaviour {
                 return '\0';
             else
             {
-                if (head == current)
+                if (head == tail)
                     head = null;
-                current = current.prev;
-                if (current != null)
+                tail = tail.prev;
+                if (tail != null)
                 {
-                    current.next = null;
-                    return current.value;
+                    tail.next = null;
+                    return tail.value;
                 }
                 return '\0';
             }
@@ -93,6 +79,11 @@ public class Prog_TypedText : MonoBehaviour {
     public Color GoodColor;
     public Color BadColor;
 
+    public bool bad;
+    public float badTimer;
+
+    int wordCount;
+
     private Text text;
     private LinkedList needToType;
     private LinkedList current;
@@ -100,9 +91,19 @@ public class Prog_TypedText : MonoBehaviour {
 	// Use this for initialization
     void Start()
     {
-        ToType = Programs[Random.Range(0, Programs.Length - 1)];
-        TypeThis.GetComponent<Text>().text = ToType;
+        wordCount = 0;
+        bad = false;
+        badTimer = 0;
         text = GetComponent<Text>();
+        SetupNextWord();
+    }
+
+    void SetupNextWord()
+    {
+        text.text = "";
+        wordCount++;
+        ToType = Words[Random.Range(0, Words.Length - 1)];
+        TypeThis.GetComponent<Text>().text = ToType;
         needToType = new LinkedList();
         for (int i = 0; i < ToType.Length; i++)
         {
@@ -116,139 +117,89 @@ public class Prog_TypedText : MonoBehaviour {
 	void Update () 
     {
         shiftPressed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+
+        if (bad)
+        {
+            badTimer -= Time.deltaTime;
+            if (badTimer <= 0)
+            {
+                text.color = GoodColor;
+                bad = false;
+                SetupNextWord();
+            }
+        }
 	}
 
     public void OnGUI()
     {
+        if (bad)
+            return;
+
         Event e = Event.current;
         if (e.type == EventType.KeyDown)
         {
             KeyCode k = e.keyCode;
             if (e.keyCode != KeyCode.None)
             {
-                if (e.keyCode == KeyCode.Backspace)
+                char result = '\0';
+                string possibleKeys = ")!@#$%^&*(";
+                if (e.keyCode.ToString().Contains("Alpha"))
+                    result = shiftPressed ? possibleKeys[int.Parse(e.keyCode.ToString().Replace("Alpha", "")) % 10] : e.keyCode.ToString().Replace("Alpha", "")[0];
+                else if (e.keyCode == KeyCode.BackQuote)
+                    result = shiftPressed ? '~' : '`';
+                else if (e.keyCode == KeyCode.Minus)
+                    result = shiftPressed ? '_' : '-';
+                else if (e.keyCode == KeyCode.Equals)
+                    result = shiftPressed ? '+' : '=';
+                else if (e.keyCode == KeyCode.LeftBracket)
+                    result = shiftPressed ? '{' : '[';
+                else if (e.keyCode == KeyCode.RightBracket)
+                    result = shiftPressed ? '}' : ']';
+                else if (e.keyCode == KeyCode.Backslash)
+                    result = shiftPressed ? '|' : '\\';
+                else if (e.keyCode == KeyCode.Semicolon)
+                    result = shiftPressed ? ':' : ';';
+                else if (e.keyCode == KeyCode.Quote)
+                    result = shiftPressed ? '"' : '\'';
+                else if (e.keyCode == KeyCode.Comma)
+                    result = shiftPressed ? '<' : ',';
+                else if (e.keyCode == KeyCode.Period)
+                    result = shiftPressed ? '>' : '.';
+                else if (e.keyCode == KeyCode.Slash)
+                    result = shiftPressed ? '?' : '/';
+                else if (e.keyCode.ToString().Length == 1)
+                    result = shiftPressed ? e.keyCode.ToString()[0] : e.keyCode.ToString().ToLower()[0];
+
+                if (result != '\0')
                 {
-                    if (current.head == null)
+                    current.Add(result);
+                    if (current.head != current.tail)
                     {
-                        current.pointer = null;
-                        current.pointerIndex = 0;
-                        needToType.pointer = needToType.head;
-                        needToType.pointerIndex = 0;
-                        return;
+                        current.pointer = current.pointer.next;
+                        current.pointerIndex++;
                     }
+                    text.text += result;
 
-                    if (!current.bad)
+                    if (needToType.pointer.value == current.pointer.value)
                     {
-                        // Autobackspace whitespace
-                        while (needToType.pointer.value == ' ' || needToType.pointer.value == '\n' || needToType.pointer.value == '\t')
+                        needToType.pointer = needToType.pointer.next;
+                        needToType.pointerIndex++;
+                        if (needToType.pointer == null)
                         {
-                            needToType.pointer = needToType.pointer.prev;
-                            needToType.pointerIndex--;
-                        }
-                        needToType.pointer = needToType.pointer.prev;
-                        needToType.pointerIndex--;
-                    }
-
-                    // Check if pointers line up again and set "bad" to false if it's fixed
-                    if (current.pointerIndex <= needToType.pointerIndex)
-                    {
-                        if (current.bad)
-                        {
-                            current.bad = false;
-                            text.color = GoodColor;
-                        }
-                    }
-
-                    // Autobackspace whitespace
-                    while (current.pointer.value == ' ' || current.pointer.value == '\n' || current.pointer.value == '\t')
-                    {
-                        current.Remove();
-                        text.text = text.text.Substring(0, text.text.Length - 1);
-                        current.pointer = current.pointer.prev;
-                        current.pointerIndex--;
-                    }
-
-                    // Remove string last character from typed string
-                    current.Remove();
-                    text.text = text.text.Substring(0, text.text.Length - 1);
-                    current.pointer = current.pointer.prev;
-                    current.pointerIndex--;
-                }
-                else if (e.keyCode == KeyCode.Space || e.keyCode == KeyCode.Tab || e.keyCode == KeyCode.Return)
-                {
-                    // Ignore
-                }
-                else
-                {
-                    char result = '\0';
-                    string possibleKeys = ")!@#$%^&*(";
-                    if (e.keyCode.ToString().Contains("Alpha"))
-                        result = shiftPressed ? possibleKeys[int.Parse(e.keyCode.ToString().Replace("Alpha", "")) % 10] : e.keyCode.ToString().Replace("Alpha", "")[0];
-                    else if (e.keyCode == KeyCode.BackQuote)
-                        result = shiftPressed ? '~' : '`';
-                    else if (e.keyCode == KeyCode.Minus)
-                        result = shiftPressed ? '_' : '-';
-                    else if (e.keyCode == KeyCode.Equals)
-                        result = shiftPressed ? '+' : '=';
-                    else if (e.keyCode == KeyCode.LeftBracket)
-                        result = shiftPressed ? '{' : '[';
-                    else if (e.keyCode == KeyCode.RightBracket)
-                        result = shiftPressed ? '}' : ']';
-                    else if (e.keyCode == KeyCode.Backslash)
-                        result = shiftPressed ? '|' : '\\';
-                    else if (e.keyCode == KeyCode.Semicolon)
-                        result = shiftPressed ? ':' : ';';
-                    else if (e.keyCode == KeyCode.Quote)
-                        result = shiftPressed ? '"' : '\'';
-                    else if (e.keyCode == KeyCode.Comma)
-                        result = shiftPressed ? '<' : ',';
-                    else if (e.keyCode == KeyCode.Period)
-                        result = shiftPressed ? '>' : '.';
-                    else if (e.keyCode == KeyCode.Slash)
-                        result = shiftPressed ? '?' : '/';
-                    else if (e.keyCode.ToString().Length == 1)
-                        result = shiftPressed ? e.keyCode.ToString()[0] : e.keyCode.ToString().ToLower()[0];
-
-                    if (result != '\0')
-                    {
-                        current.Add(result);
-                        if (current.head != current.current)
-                        {
-                            current.pointer = current.pointer.next;
-                            current.pointerIndex++;
-                        }
-                        text.text += result;
-
-                        // Check if linked list matches
-                        if (!current.bad)
-                        {
-                            if (needToType.pointer.value == current.pointer.value)
+                            MainGame.CodeQuality += 0.1f;
+                            SetupNextWord();
+                            if (wordCount >= 10)
                             {
-                                needToType.pointer = needToType.pointer.next;
-                                needToType.pointerIndex++;
-                                if (needToType.pointer == null)
-                                {
-                                    MainGame.CodeQuality = 1;
-                                    Application.LoadLevel("GameMenuScene");
-                                    return;
-                                }
-
-                                while (needToType.pointer.value == ' ' || needToType.pointer.value == '\n' || needToType.pointer.value == '\t')
-                                {
-                                    current.Add(needToType.pointer.value);
-                                    text.text += needToType.pointer.value;
-                                    current.pointer = current.pointer.next;
-                                    current.pointerIndex++;
-                                    needToType.pointer = needToType.pointer.next;
-                                    needToType.pointerIndex++;
-                                }
-                            }
-                            else
-                            {
-                                current.bad = true;
-                                text.color = BadColor;
+                                Application.LoadLevel("GameMenuScene");
+                                return;
                             }
                         }
+                    }
+                    else
+                    {
+                        bad = true;
+                        badTimer = 0.5f;
+                        text.color = BadColor;
                     }
                 }
             }
