@@ -55,6 +55,7 @@ public class Results : MonoBehaviour {
         MainGame.MusicSource.time = 0;
         MainGame.AtQA = false;
         MainGame.time = 48f;
+        Destroy(MainGame.manager.gameObject);
         MainGame.manager = null;
         Application.LoadLevel("StartMenuScene");
     }

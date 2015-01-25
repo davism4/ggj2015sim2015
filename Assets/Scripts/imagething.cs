@@ -4,12 +4,16 @@ using UnityEngine.UI;
 
 public class imagething : MonoBehaviour {
 	
-	static int SIZE = 256;
+	static int SIZE = 256; // SIZE OF THE PAINTING SURFACE
+	static float SCORETOPASS = 0.25f; // % OF DRAWN PIXELS THAT NEED TO BE ON THE MARK TO PASS
+	static int BRUSHSIZE=2; // MUST BE BIGGER THAN 1
+	static float MINDRAWLENGTH = 120; // YOU CAN'T PASS UNTIL THE NUMBER OF PIXELS
+									  //  YOU DRAW IS BIGGER THAN THIS NUMBER
 	
 	Color[,] a = new Color[SIZE,SIZE];
 	Color[,] b = new Color[SIZE,SIZE];
 	Color[,] c = new Color[SIZE,SIZE];
-	bool[,] d = new bool[SIZE,SIZE];
+//	bool[,] d = new bool[SIZE,SIZE];
 	Image img;
 	int g=0;
 	float total=0;
@@ -17,7 +21,9 @@ public class imagething : MonoBehaviour {
 	float linemiss=0;
 	float outside=0;
 	int timer=0;
-	
+
+	float score=0;
+	float drawlength=0;
 	// Use this for initialization
 	void Start () {
 		
@@ -80,10 +86,11 @@ public class imagething : MonoBehaviour {
 		
 		Rect r = GameObject.Find("Canvas").GetComponent<RectTransform>().rect;
 		Vector3 m = Input.mousePosition;
-		Vector3 adjm = new Vector3(m.x/r.width,m.y/r.height,0)*SIZE;
+//		Vector3 adjm = new Vector3(m.x/r.width,m.y/r.height,0)*SIZE;
 		Vector3 adjm2 = new Vector3((m.x-r.width/2+r.height/2)/r.height,
 		                            m.y/r.height,
 		                            0)*SIZE;
+//		if adjm2
 		if(adjm2last.x==999)
 			adjm2last=adjm2;
 		Vector3 newzero = new Vector3(m.x-r.width/2,m.y-r.height/2,0);
@@ -97,8 +104,20 @@ public class imagething : MonoBehaviour {
 		}
 		if(itsdown||rmbdown) {
 			for(float t=0f;t<1f;t+=0.01f) {
-				Vector3 p = Vector3.Lerp(adjm2last,adjm2,t);
-				b[(int)p.y,(int)p.x]=(paintcolor.Equals(Color.black) ? a[(int)p.y,(int)p.x] : paintcolor);
+				for(int i=-(BRUSHSIZE-1)/2;i<(BRUSHSIZE)/2;i++) {
+					for(int j=-(BRUSHSIZE-1)/2;j<(BRUSHSIZE)/2;j++) {
+						Vector3 p = Vector3.Lerp(adjm2last,adjm2,t);
+						if(p.x<BRUSHSIZE)
+							p.x=BRUSHSIZE;
+						if(p.x>=SIZE-BRUSHSIZE)
+							p.x=SIZE-BRUSHSIZE;
+						if(p.y<BRUSHSIZE)
+							p.y=BRUSHSIZE;
+						if(p.y>=SIZE-BRUSHSIZE)
+							p.y=SIZE-BRUSHSIZE;
+						b[(int)p.y+i,(int)p.x+j]=(paintcolor.Equals(Color.black) ? a[(int)p.y+i,(int)p.x+j] : paintcolor);
+					}
+				}
 			}
 		}
 		adjm2last=adjm2;
@@ -158,7 +177,10 @@ public class imagething : MonoBehaviour {
 		//		Debug.Log("\n");
 		//		printmeint (d);
 
-				Debug.Log("Total: "+total+"\tHit: "+hit+"\tMiss: "+linemiss+"\tOutside: "+outside+"\tPass: "+(3f*hit-outside>0&&linemiss<150));
+		drawlength = (outside+hit);
+//		print (linelength);
+		score=(hit)/(drawlength);
+		Debug.Log("Total: "+total+"\tHit: "+hit+"\tMiss: "+linemiss+"\tOutside: "+outside+"\tScore: "+score+"\tPass: "+(score>SCORETOPASS&&drawlength>MINDRAWLENGTH));
 		
 		itusedtobedown=itsdown;
 		rmbusedtobedown=rmbdown;
@@ -182,7 +204,6 @@ public class imagething : MonoBehaviour {
 //		Debug.Log (tex.width+" "+tex.height);
 		tex.SetPixels(alt);
 		tex.Apply();
-		
 		Sprite s = Sprite.Create(tex,new Rect(0,0,Mathf.Sqrt(r.Length),Mathf.Sqrt(r.Length)),Vector2.up);
 		img.sprite=s;
 	}
