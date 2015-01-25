@@ -11,11 +11,6 @@ public class StartGame : MonoBehaviour
         if (obj != null)
             Destroy(obj);
 
-        PlayerPrefs.SetString("GameTitle", "Game Title Here");
-        PlayerPrefs.SetFloat("time", 48f);
-        PlayerPrefs.SetInt("CodeQuality", 0);
-        PlayerPrefs.SetInt("ArtQuality", 0);
-        PlayerPrefs.SetInt("AudioQuality", 0);
-        PlayerPrefs.SetInt("DesignQuality", 0);
+
     }
 }

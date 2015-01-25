@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class MusicLevel : MonoBehaviour
 {
+    float MainMusicVolumeReduction = 0.3f;
+
     SpriteRenderer[] topRenderers; // good/bad picture
     SpriteRenderer[] instrumentRenderers; // instrument picture
     new AudioSource audio;
@@ -19,9 +21,12 @@ public class MusicLevel : MonoBehaviour
     public int[] patternCorrect;
     public int[] patternEntered;
 
-    public int numEntered;
-    public int playIndex;
-    public float instrumentTimer;
+    int numEntered;
+    int playIndex;
+    float instrumentTimer;
+
+    float clickdelay = 0f;
+    public bool CanClick { get { return (playIndex==4) && (clickdelay <= 0f); } }
 
     public void EnterSound(InstrumentButton i)
     {
@@ -36,11 +41,13 @@ public class MusicLevel : MonoBehaviour
 
             //Debug.Log("Entered " + i.ToString() + ": " + correct[numEntered].ToString());
             numEntered++;
+            clickdelay = 0.98f; // forced to wait for most of the sound to play
         }
     }
 
     void OnDisable()
     {
+        if (MainGame.MusicSource != null)
         MainGame.MusicSource.volume = 1f;
     }
 
@@ -89,7 +96,8 @@ public class MusicLevel : MonoBehaviour
         numEntered = 0;
         playIndex = 0;
         instrumentTimer = 0;
-        MainGame.MusicSource.volume = 0.25f;
+        if (MainGame.MusicSource != null)
+            MainGame.MusicSource.volume = MainMusicVolumeReduction;
     }
 
     void Update()
@@ -117,6 +125,7 @@ public class MusicLevel : MonoBehaviour
                 }
             }
         }
+        if (clickdelay >= 0f) clickdelay -= Time.deltaTime;
         
     }
 
