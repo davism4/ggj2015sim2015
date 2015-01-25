@@ -7,19 +7,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class InstrumentButton : MonoBehaviour
 {
-    [HideInInspector] public int instrumentType;
+    public int instrumentType;
     public AudioClip clip;
-
-    public enum Instrument : int { Trumpet, Guitar, Bell, Drum };
-    public Instrument instrument;
-
-    void Awake()
-    {
-        if (instrument == Instrument.Trumpet) instrumentType = 0;
-        else if (instrument == Instrument.Guitar) instrumentType = 1;
-        else if (instrument == Instrument.Bell) instrumentType = 2;
-        else instrumentType = 3;
-    }
 
     ////Rect rect;
     //Texture texture;

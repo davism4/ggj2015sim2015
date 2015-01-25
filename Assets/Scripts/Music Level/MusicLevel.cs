@@ -16,8 +16,8 @@ public class MusicLevel : MonoBehaviour
 
     int Length;
     bool[] correct;
-    int[] patternCorrect;
-    int[] patternEntered;
+    public int[] patternCorrect;
+    public int[] patternEntered;
     Image[] markImages; // good/bad picture
     Image[] instrumentImages; // instrument picture
     int numEntered;
@@ -151,7 +151,7 @@ public class MusicLevel : MonoBehaviour
 
     void LateUpdate()
     {
-        if (numEntered == Length)
+        if (numEntered == Length && clickdelay<=0f)
         {
             float goodcount = 0;
 

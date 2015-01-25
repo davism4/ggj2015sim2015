@@ -69,6 +69,8 @@ public class DesignLevelPlayer : MonoBehaviour
             DesignIdea d = other.gameObject.GetComponent<DesignIdea>();
 
             if (d.Good) GoodCount += 1f;
+            else GoodCount += 0.1f;
+
             WordCount++;
 
             if (WordCount == 3)

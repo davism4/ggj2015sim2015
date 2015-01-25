@@ -3,11 +3,13 @@ using System.Collections;
 
 public class Swatter : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
+    [HideInInspector] public new AudioSource audio;
+
+    void Awake()
+    {
+        audio = GetComponent<AudioSource>();
+    }
+
 	// Update is called once per frame
 	void Update () {
         if (transform.position.y > -11)
