@@ -5,9 +5,27 @@ using UnityEngine.UI;
 public class Prog_TypedText : MonoBehaviour {
 
     public static string[] Words = new string[] {
-        "void", "import", "make_game()", "public", "class", "static", "string[]", "linkedlist", "system.out.println",
-        "integer", "float", "reference", "null", "boolean", "variable", "while", "x=14", "{};", "unityengine",
-        "system.collections"
+        "make_game()",
+        "spawn_money()",
+        "update_objects()",
+        "draw_game()",
+        "init_toWinIt()",
+        "delete(sys32)",
+        "create_words()",
+        "increment()",
+        "decrement()",
+        "fix_bug()",
+        "get_famous()",
+        "find_waldo()",
+        "type_words()",
+        "say_hi()",
+        "make_account()",
+        "trace_picture()",
+        "solve_universe()",
+        "hack_cia()",
+        "play_song()",
+        "left_shift()",
+        "right_shift()"
     };
 
     public class LinkedList
@@ -84,6 +102,7 @@ public class Prog_TypedText : MonoBehaviour {
     public float goodTimer;
 
     int wordCount;
+    int goodWords;
 
     private Text text;
     private LinkedList needToType;
@@ -93,6 +112,7 @@ public class Prog_TypedText : MonoBehaviour {
     void Start()
     {
         wordCount = 0;
+        goodWords = 0;
         bad = false;
         badTimer = 0;
         text = GetComponent<Text>();
@@ -103,6 +123,12 @@ public class Prog_TypedText : MonoBehaviour {
     {
         text.text = "";
         wordCount++;
+        if (wordCount >= 6)
+        {
+            MainGame.CodeQuality = (float)goodWords / (wordCount - 1);
+            Application.LoadLevel("GameMenuScene");
+            return;
+        }
         ToType = Words[Random.Range(0, Words.Length - 1)];
         TypeThis.GetComponent<Text>().text = ToType;
         needToType = new LinkedList();
@@ -193,13 +219,8 @@ public class Prog_TypedText : MonoBehaviour {
                         needToType.pointerIndex++;
                         if (needToType.pointer == null)
                         {
-                            MainGame.CodeQuality += 0.1f;
+                            goodWords++;
                             goodTimer = 0.2f;
-                            if (wordCount >= 10)
-                            {
-                                Application.LoadLevel("GameMenuScene");
-                                return;
-                            }
                         }
                     }
                     else
