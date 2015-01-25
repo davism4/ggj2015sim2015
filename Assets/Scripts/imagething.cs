@@ -125,14 +125,14 @@ public class imagething : MonoBehaviour {
 					for(int j=-(BRUSHSIZE-1)/2;j<(BRUSHSIZE)/2;j++) {
 						Vector3 p = Vector3.Lerp(adjm2last,adjm2,t);
 						if(p.x<BRUSHSIZE)
-							p.x=BRUSHSIZE;
+							p.x=BRUSHSIZE;//paintcolor=Color.clear;
 						if(p.x>=SIZE-BRUSHSIZE)
-							p.x=SIZE-BRUSHSIZE;
+							p.x=SIZE-BRUSHSIZE;//paintcolor=Color.clear;
 						if(p.y<BRUSHSIZE)
-							p.y=BRUSHSIZE;
+							p.y=BRUSHSIZE;//paintcolor=Color.clear;
 						if(p.y>=SIZE-BRUSHSIZE)
-							p.y=SIZE-BRUSHSIZE;
-						b[(int)p.y+i,(int)p.x+j]=(paintcolor.Equals(Color.black) ? a[(int)p.y+i,(int)p.x+j] : paintcolor);
+							p.y=SIZE-BRUSHSIZE;//paintcolor=Color.clear;
+						b[(int)p.y+i,(int)p.x+j]=(paintcolor.Equals(Color.black) ? a[(int)p.y+i,(int)p.x+j] : (p.x>=SIZE-BRUSHSIZE ? Color.white : paintcolor));
 					}
 				}
 			}
