@@ -7,6 +7,8 @@ public class Reviews : MonoBehaviour
 {
     [HideInInspector] public new Transform transform;
     public Text text;
+    public GameObject ResetButton;
+
     string message;
     int charcount;
     List<string> prefixes;
@@ -44,6 +46,7 @@ public class Reviews : MonoBehaviour
         state = States.Entering;
         stopHeight = Screen.height * 0.5f;
         endHeight = Screen.height * 3;
+        
         Reset();
     }
 
@@ -72,6 +75,7 @@ public class Reviews : MonoBehaviour
             else
             {
                 state = States.Leaving;
+                ResetButton.SetActive(true);
             }
         }
         else if (state == States.Typing)
@@ -112,6 +116,7 @@ public class Reviews : MonoBehaviour
 
     void Reset()
     {
+        ResetButton.SetActive(false);
         authors = new List<string>() { "T. Cordle", "M. Davis", "C. Hamer", "A. Wozniak" };
         subjects = new List<int>() { 0, 1, 2, 3 };
         verbs = new List<string>()
@@ -153,6 +158,7 @@ public class Reviews : MonoBehaviour
             "graphics",
             "imagery",
             "models",
+            "resolution",
             "scenery",
             "visuals"
         };

@@ -30,7 +30,7 @@ public class MusicLevel : MonoBehaviour
 
     public void EnterSound(InstrumentButton i)
     {
-        if (numEntered < Length)
+        if (numEntered < Length && CanClick)
         {
             MainGame.AudioSounds[numEntered] = i.clip;
             audio.clip = i.clip;

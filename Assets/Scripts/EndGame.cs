@@ -5,7 +5,7 @@ using System.Collections;
 public class EndGame : MonoBehaviour {
     
     public Text txtTitle;
-    public Button ResetButton;
+   // public Button ResetButton;
     
     enum States { Load, Play, Crash };
     States state;
@@ -29,6 +29,7 @@ public class EndGame : MonoBehaviour {
         ftimer = 1f;
         state = States.Load;
         txtTitle.text = MainGame.GameTitle;
+    //    ResetButton.enabled = false;
         if (MainGame.MusicSource != null)
             MainGame.MusicSource.Stop();
         Transform clock = GameObject.FindObjectOfType<Timer>().transform;
