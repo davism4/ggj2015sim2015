@@ -81,6 +81,7 @@ public class Prog_TypedText : MonoBehaviour {
 
     public bool bad;
     public float badTimer;
+    public float goodTimer;
 
     int wordCount;
 
@@ -127,6 +128,12 @@ public class Prog_TypedText : MonoBehaviour {
                 bad = false;
                 SetupNextWord();
             }
+        }
+        if (text.text.Length > 0 && goodTimer > 0)
+        {
+            goodTimer -= Time.deltaTime;
+            if (goodTimer <= 0)
+                SetupNextWord();
         }
 	}
 
@@ -187,7 +194,7 @@ public class Prog_TypedText : MonoBehaviour {
                         if (needToType.pointer == null)
                         {
                             MainGame.CodeQuality += 0.1f;
-                            SetupNextWord();
+                            goodTimer = 0.2f;
                             if (wordCount >= 10)
                             {
                                 Application.LoadLevel("GameMenuScene");
