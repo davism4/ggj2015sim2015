@@ -52,35 +52,50 @@ public class Reviews : MonoBehaviour
         };
         terms_art = new List<string>()
         {
-            "art",
+            "art", "art style", "artwork",
+            "backgrounds",
+            "character models", "cinematics",
             "graphics",
             "imagery",
+            "models",
+            "scenery",
             "visuals"
         };
         terms_sound = new List<string>()
         {
-            "audio",
+            "arrangement", "audio",
+            "composition",
             "music",
-            "sound",
-            "soundtrack",
+            "songs", "sound", "soundtrack",
+            "theme song",
+            "voice acting",
         };
         terms_design = new List<string>()
         {
+            "character development",
             "concept",
-            "design",
+            "design", "dialogue",
             "idea",
-            "theme"
+            "plot",
+            "story",
+            "writing",
         };
         terms_code = new List<string>()
         {
-            "code",
+            "code", "controls",
+            "DLC",
             "engine",
+            "framerate",
+            "loading time",
+            "menus",
             "physics",
+            "response time",
             "stability"
         };
         prefixes = new List<string>()
         {
            "Critics say that the",
+           "I liked how the",
            "I thought that the",
            "I'd say the",
            "IGN says the",
@@ -109,6 +124,7 @@ public class Reviews : MonoBehaviour
         adjectives_good = new List<string>(){
            "admirable",
            "good","great",
+           "fantastic",
            "high-quality",
            "nice",
            "pleasant",
@@ -119,13 +135,17 @@ public class Reviews : MonoBehaviour
         };
         adjectives_bad = new List<string>()
         {
-           "bad",
            "awful",
-           "terrible",
-           "horrendous",
-           "vile",
+           "bad",
+           "childish",
+           "distasteful",
            "flawed",
+           "horrendous",
+           "mediocre",
+           "terrible",
            "poor","poorly done",
+           "unpleasant",
+           "vile",
         };
     }
 
@@ -169,7 +189,11 @@ public class Reviews : MonoBehaviour
         string text ="\"";
         // prefix + subject
         text += PullWord(prefixes)  + " " + subject + " ";
-        text += Chance(0.5f) ? "is " : "was ";
+        if (subject[subject.Length - 1] == 's')
+            text += Chance(0.5f) ? "are " : "were ";
+        else
+            text += Chance(0.5f) ? "is " : "was ";
+        
         // adverb
         if (quality <= 0.25f)
         {
