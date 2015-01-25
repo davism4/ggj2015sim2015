@@ -9,7 +9,9 @@ public class imagething : MonoBehaviour {
 	static int BRUSHSIZE=4; // MUST BE BIGGER THAN 1
 	static float MINDRAWLENGTH = 401*3; // YOU CAN'T PASS UNTIL THE NUMBER OF PIXELS
 									  //  YOU DRAW IS BIGGER THAN THIS NUMBER
-	
+
+    public static Texture2D Drawing;
+
 	Color[,] a = new Color[SIZE,SIZE];
 	Color[,] b = new Color[SIZE,SIZE];
 	Color[,] c = new Color[SIZE,SIZE];
@@ -204,6 +206,13 @@ public class imagething : MonoBehaviour {
 
     public void ExitArt()
     {
+        Color[] b_single = new Color[b.GetLength(0) * b.GetLength(1)];
+        for (int r = 0; r < b.GetLength(0); r++)
+            for (int c = 0; c < b.GetLength(1); c++)
+                b_single[r * b.GetLength(1) + c] = new Color(b[r, c].r, b[r, c].g, b[r, c].b, b[r, c].r > 0 ? 0 : 1);
+        Drawing = new Texture2D(b.GetLength(1), b.GetLength(0));
+        Drawing.SetPixels(b_single);
+        Drawing.Apply();
         MainGame.ArtQuality = (drawlength > MINDRAWLENGTH) ? (score * 1 / 0.35f) : (0.5f * score / 0.35f);
         Application.LoadLevel("GameMenuScene");
     }
