@@ -32,7 +32,8 @@ public class EndGame : MonoBehaviour {
         ftimer = 1f;
         state = States.Load;
         txtTitle.text = MainGame.GameTitle;
-        MainGame.MusicSource.Stop();
+        if (MainGame.MusicSource != null)
+            MainGame.MusicSource.Stop();
     }
 
     void Update()
