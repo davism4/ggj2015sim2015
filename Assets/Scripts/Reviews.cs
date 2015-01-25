@@ -5,7 +5,10 @@ using System.Collections.Generic;
 
 public class Reviews : MonoBehaviour
 {
+    [HideInInspector] public new Transform transform;
     public Text text;
+    string message;
+    int charcount;
     List<string> prefixes;
     List<string> adverbs_low;
     List<string> adverbs_high;
@@ -19,6 +22,14 @@ public class Reviews : MonoBehaviour
     List<int> subjects;
     List<string> verbs;
 
+    public enum States { Waiting, Entering, Typing, Leaving, Done };
+    public States state;
+    float delay = 0f;
+
+    float stopHeight, endHeight;
+    public float slideSpeed = 50f;
+    public float waitTime = 3f;
+
     static bool Chance(float percent)
     {
         if (UnityEngine.Random.Range(0f, 1f) < percent)
@@ -29,17 +40,74 @@ public class Reviews : MonoBehaviour
 
     void Awake()
     {
+        transform = GetComponent<Transform>();
+        state = States.Entering;
+        stopHeight = Screen.height * 0.5f;
+        endHeight = Screen.height * 3;
         Reset();
+    }
+
+    void Update()
+    {
+        if (state == States.Entering)
+        {
+            if (transform.position.y < stopHeight)
+                transform.position += Vector3.up * slideSpeed * Time.deltaTime;
+            else
+                state = States.Typing;
+        }
+        else if (state == States.Leaving)
+        {
+            if (transform.position.x < endHeight)
+                transform.position += Vector3.up * slideSpeed * Time.deltaTime;
+            else
+                state = States.Done;
+        }
+        else if (state == States.Waiting)
+        {
+            if (delay > 0)
+            {
+                delay -= Time.deltaTime;
+            }
+            else
+            {
+                state = States.Leaving;
+            }
+        }
+        else if (state == States.Typing)
+        {
+            if (charcount < message.Length)
+            {
+                if (delay > 0)
+                {
+                    delay -= Time.deltaTime;
+                }
+                else
+                {
+                    delay = 0.005f;
+                    text.text += message[charcount];
+                    charcount++;
+                }
+            }
+            else
+            {
+                delay = waitTime;
+                state = States.Waiting;
+            }
+        }
     }
 
     void Start()
     {
         text.text = "";
+        message = "";
+        charcount = 0;
+        state = States.Entering;
         for (int i = 0; i < 3; i++)
         {
-            text.text += GenerateReview() + "\n";
+            message += GenerateReview() + "\n";
         }
-        text.text += GenerateReview();
+        message += GenerateReview();
     }
 
     void Reset()
@@ -52,10 +120,10 @@ public class Reviews : MonoBehaviour
         };
         prefixes = new List<string>()
         {
-           "Audiences will like how the",
-           "Audiences will say that the",
-           "Critics say that the",
-           "Critics agree that the",
+           "Audiences will think the",
+           "Audiences will say the",
+           "Critics say the",
+           "Critics agree the",
            "I believe that the",
            "I believe the",
            "I feel that the",
@@ -67,12 +135,12 @@ public class Reviews : MonoBehaviour
            "I'd say that the",
            "IGN says the",
            "In my opinion, the",
-           "Its",
-           "Judges believe that the ",
-           "Judges said that the",
-           "Reviews agree that the",
+           "Its","Its","Its",
+           "Judges believe the",
+           "Judges said the",
+           "Reviews agree the",
            "Reviewers say the",
-           "The",
+           "The","The","The",
            "The game's",
            "This game's",
            "Unlike IGN, I think the",
@@ -120,6 +188,7 @@ public class Reviews : MonoBehaviour
             "stability"
         };
         adverbs_low = new List<string>() {
+           "","","","","",
            "a bit", "almost", "arguably",
            "fairly",
            "kind of",
@@ -204,7 +273,7 @@ public class Reviews : MonoBehaviour
         int subject = PullInt(subjects);
         string author = PullWord(authors);
         string verb = PullWord(verbs);
-        string text = author + " " + verb + " ";
+        string text = author + " " + verb + ": ";
 
         if (subject == 0)
             text += GenerateSentence(PullWord(terms_art), MainGame.ArtQuality);
@@ -245,7 +314,8 @@ public class Reviews : MonoBehaviour
             text += PullWord(adverbs_high) + " " + PullWord(adjectives_good);
         }
         text += Chance(0.8f) ? "." : "!";
-        text += "\" (" + (quality*10).ToString("0.0") + "/10)";
+        text += "\" (" + (quality*10).ToString("0.#") + "/10)";
+        text = text.Replace("  ", " ");
         return text;
     }
 }

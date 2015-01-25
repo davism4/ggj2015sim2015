@@ -3,12 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class EndGame : MonoBehaviour {
-     
-    public Text txtArt;
-    public Text txtCode;
-    public Text txtDesign;
-    public Text txtMusic;
-    public Text txtQA;
+    
     public Text txtTitle;
     public Button ResetButton;
     
@@ -36,9 +31,9 @@ public class EndGame : MonoBehaviour {
         txtTitle.text = MainGame.GameTitle;
         if (MainGame.MusicSource != null)
             MainGame.MusicSource.Stop();
-        Transform clock = GameObject.FindObjectOfType<Timer>().transform;
-        if (clock!=null)
-            Destroy(clock.gameObject);
+        //Transform clock = GameObject.FindObjectOfType<Timer>().transform;
+        //if (clock != null)
+        //    Destroy(clock.gameObject);
     }
 
     void Update()

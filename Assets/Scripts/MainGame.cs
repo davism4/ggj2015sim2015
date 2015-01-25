@@ -20,16 +20,17 @@ public class MainGame : MonoBehaviour {
     public static float ArtQuality = 0;
     public static float AudioQuality = 0;
     public static float DesignQuality = 0;
-    public static float QualityQuality = 0;
 
-    public void Reset()
+    public static void Reset()
     {
         GameTitle = "Your Title Here";
         CodeQuality = 0;
         ArtQuality = 0;
         AudioQuality = 0;
         DesignQuality = 0;
-        QualityQuality = 0;
+        goingToResults = false;
+        resultsTime = 0;
+        MusicSource.time = 0;
         time = 48f;
     }
 
