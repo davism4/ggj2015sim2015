@@ -35,6 +35,5 @@ public class Yee : MonoBehaviour {
         }
 
         text.color = new Color(red, 0, 0);
-        //yee
 	}
 }
