@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class imagething : MonoBehaviour {
 	
 	static int SIZE = 256; // SIZE OF THE PAINTING SURFACE
-	static float SCORETOPASS = 0.25f; // % OF DRAWN PIXELS THAT NEED TO BE ON THE MARK TO PASS
-	static int BRUSHSIZE=2; // MUST BE BIGGER THAN 1
+	static float SCORETOPASS = 0.2f; // % OF DRAWN PIXELS THAT NEED TO BE ON THE MARK TO PASS
+	static int BRUSHSIZE=4; // MUST BE BIGGER THAN 1
 	static float MINDRAWLENGTH = 120; // YOU CAN'T PASS UNTIL THE NUMBER OF PIXELS
 									  //  YOU DRAW IS BIGGER THAN THIS NUMBER
 	
