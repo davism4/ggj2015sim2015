@@ -196,11 +196,17 @@ public class imagething : MonoBehaviour {
 //		print (linelength);
 		score=(hit)/(drawlength);
 		Debug.Log("Total: "+total+"\tHit: "+hit+"\tMiss: "+linemiss+"\tOutside: "+outside+"\tScore: "+score+"\tPass: "+(score>SCORETOPASS&&drawlength>MINDRAWLENGTH));
-		
+
 		itusedtobedown=itsdown;
 		rmbusedtobedown=rmbdown;
 		
 	}
+
+    public void ExitArt()
+    {
+        MainGame.ArtQuality = (drawlength > MINDRAWLENGTH) ? (score * 1 / 0.35f) : (0.5f * score / 0.35f);
+        Application.LoadLevel("GameMenuScene");
+    }
 	
 	void OnDestroy() {
 		clear(c,Color.white);
