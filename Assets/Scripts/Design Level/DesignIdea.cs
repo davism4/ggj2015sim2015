@@ -21,18 +21,7 @@ public class DesignIdea : MonoBehaviour {
         //rigidbody2D.velocity = -Vector2.up * UnityEngine.Random.Range(SpeedMin, SpeedMax);
         //text = GetComponent<Text>();
 	}
-	
-	public void SetWord(string w, bool good)
-	{
-		Word = w;
-		//text.text = Word;
-        Good = good;
-        //if (good)
-        //    renderer.material.color = Color.green;
-        //else
-        //    renderer.material.color = Color.red;
-	}
-	
+
 	void Update ()
     {
         transform.position -= Time.deltaTime * speed * Vector3.up;

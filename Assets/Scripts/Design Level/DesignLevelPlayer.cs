@@ -33,11 +33,21 @@ public class DesignLevelPlayer : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         if (horizontal > 0f)
         {
-            rigidbody2D.velocity = Vector2.right * moveSpeed;
+            float right = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x-1;
+            Debug.Log("Move: right=" + right);
+            if (transform.position.x < right)
+            {
+                transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+            }
         }
         else if (horizontal < 0f)
         {
-            rigidbody2D.velocity = -Vector2.right * moveSpeed;
+            float left = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x+1;
+            Debug.Log("Move: left=" + left);
+            if (transform.position.x > left)
+            {
+                transform.position -= Vector3.right * moveSpeed * Time.deltaTime;
+            }
         }
         else
         {

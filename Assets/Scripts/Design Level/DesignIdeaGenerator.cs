@@ -5,17 +5,15 @@ using UnityEngine;
 public class DesignIdeaGenerator : MonoBehaviour
 {
     float GoodWordChance = 0.25f;
-    float leftLimit;
-    float rightLimit;
-    float yLimit;
-    public GameObject DesignIdeaGameObject;
+    
     float genTimer = 0f;
     float maxGenTimer = 1.5f;
+
+    public GameObject GoodDesignIdea;
+    public GameObject BadDesignIdea;
     
     List<string> BadWords;
     List<string> GoodWords;
-
-    public Sprite[] sprites = new Sprite[2];
 
     void SetGoodWords()
     {
@@ -64,13 +62,7 @@ public class DesignIdeaGenerator : MonoBehaviour
         
     }
     
-    void Awake() // once
-    {
-        leftLimit = transform.FindChild("Left Limit").transform.position.x;
-        rightLimit = transform.FindChild("Right Limit").transform.position.x;
-        yLimit = transform.FindChild("Right Limit").transform.position.y;
-		//DontDestroyOnLoad(transform.gameObject);
-    }
+
     
     void Start() // each scene load
     {
@@ -92,24 +84,31 @@ public class DesignIdeaGenerator : MonoBehaviour
     void CreateIdea()
     {
         string word;
-        Vector3 spawnpoint = new Vector3(UnityEngine.Random.Range(leftLimit, rightLimit), yLimit, 0f);
-        GameObject body = (GameObject)Instantiate(DesignIdeaGameObject, spawnpoint, Quaternion.identity);
-        if (UnityEngine.Random.Range(0f, 1f) > GoodWordChance)
+        float left = Camera.main.ScreenToWorldPoint(Vector3.zero).x;
+        float right = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,0,0)).x;
+        float y = transform.position.y;// Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
+        Debug.Log("Create idea: right=" + right + ", left = " + left + ", y = " + y);
+
+        Vector3 spawnpoint = new Vector3(UnityEngine.Random.Range(left, right), y, 0f);
+        GameObject body;
+        if (UnityEngine.Random.Range(0f, 1f) <= GoodWordChance)
         {
-            word = BadWords[UnityEngine.Random.Range(0, BadWords.Count-1)];
-            body.transform.GetComponent<DesignIdea>().SetWord(word, false);
-            body.transform.GetComponent<SpriteRenderer>().sprite = sprites[0];
-            BadWords.Remove(word);
-            if (BadWords.Count == 0) SetBadWords();
+            body = (GameObject)Instantiate(GoodDesignIdea, spawnpoint, Quaternion.identity);
+            word = GoodWords[UnityEngine.Random.Range(0, GoodWords.Count-1)];
+            GoodWords.Remove(word);
+            if (GoodWords.Count == 0) SetGoodWords();
+            GoodWordChance -= 0.015f; // change likelihood
         }
         else
         {
-            word = GoodWords[UnityEngine.Random.Range(0, GoodWords.Count-1)];
-            body.transform.GetComponent<DesignIdea>().SetWord(word, true);
-            body.transform.GetComponent<SpriteRenderer>().sprite = sprites[1];
-            GoodWords.Remove(word);
-            if (GoodWords.Count == 0) SetGoodWords();
+            body = (GameObject)Instantiate(BadDesignIdea, spawnpoint, Quaternion.identity);
+            word = BadWords[UnityEngine.Random.Range(0, BadWords.Count - 1)];
+            BadWords.Remove(word);
+            if (BadWords.Count == 0) SetBadWords();
+            GoodWordChance += 0.015f; // change likelihood
         }
+        
+        body.transform.GetComponent<DesignIdea>().Word = word;
     }
 
 }
