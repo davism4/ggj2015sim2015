@@ -213,7 +213,7 @@ public class imagething : MonoBehaviour {
         Drawing = new Texture2D(b.GetLength(1), b.GetLength(0));
         Drawing.SetPixels(b_single);
         Drawing.Apply();
-        MainGame.ArtQuality = (drawlength > MINDRAWLENGTH) ? (score * 1 / 0.27f) : (0.5f * score / 0.27f);
+        MainGame.ArtQuality = (drawlength > MINDRAWLENGTH) ? Mathf.Min(score * 1 / 0.25f, 1f) : (0.5f * score / 0.25f);
         Application.LoadLevel("GameMenuScene");
     }
 	
