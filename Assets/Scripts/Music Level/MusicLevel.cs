@@ -47,7 +47,7 @@ public class MusicLevel : MonoBehaviour
         }
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         if (MainGame.MusicSource != null)
             MainGame.MusicSource.volume = 1f;

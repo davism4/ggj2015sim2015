@@ -104,6 +104,11 @@ public class Prog_TypedText : MonoBehaviour {
     int wordCount;
     int goodWords;
 
+    void OnDestroy()
+    {
+        MainGame.CodeQuality = (float)goodWords / wordCount;
+    }
+
     private Text text;
     private LinkedList needToType;
     private LinkedList current;

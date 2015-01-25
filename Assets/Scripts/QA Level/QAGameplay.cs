@@ -29,7 +29,7 @@ public class QAGameplay : MonoBehaviour {
         bugs.Add(GameObject.Instantiate(bug, new Vector3(Random.Range(-7, 7), Random.Range(-2, 4)), Quaternion.Euler(Vector3.back * Random.Range(-180, 180))));
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         Debug.Log("CLOSING QA");
         float increase = 0.002f;

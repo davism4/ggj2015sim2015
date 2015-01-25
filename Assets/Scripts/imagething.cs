@@ -230,6 +230,7 @@ public class imagething : MonoBehaviour {
 		//		Debug.Log (tex.width+" "+tex.height);
 		tex.SetPixels(alt);
 		tex.Apply();
+        ExitArt();
 //		Sprite s = Sprite.Create(tex,new Rect(0,0,Mathf.Sqrt(startimage.Length),Mathf.Sqrt(startimage.Length)),Vector2.up);
 //		img.sprite=s;
 	}
