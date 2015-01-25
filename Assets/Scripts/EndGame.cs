@@ -31,9 +31,9 @@ public class EndGame : MonoBehaviour {
         txtTitle.text = MainGame.GameTitle;
         if (MainGame.MusicSource != null)
             MainGame.MusicSource.Stop();
-        //Transform clock = GameObject.FindObjectOfType<Timer>().transform;
-        //if (clock != null)
-        //    Destroy(clock.gameObject);
+        Transform clock = GameObject.FindObjectOfType<Timer>().transform;
+        if (clock != null)
+            Destroy(clock.gameObject);
     }
 
     void Update()
