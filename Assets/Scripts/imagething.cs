@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class imagething : MonoBehaviour {
 	
 	static int SIZE = 256; // SIZE OF THE PAINTING SURFACE
-	static float SCORETOPASS = 0.25f; // % OF DRAWN PIXELS THAT NEED TO BE ON THE MARK TO PASS
-	static int BRUSHSIZE=2; // MUST BE BIGGER THAN 1
-	static float MINDRAWLENGTH = 120; // YOU CAN'T PASS UNTIL THE NUMBER OF PIXELS
+	static float SCORETOPASS = 0.2f; // % OF DRAWN PIXELS THAT NEED TO BE ON THE MARK TO PASS
+	static int BRUSHSIZE=4; // MUST BE BIGGER THAN 1
+	static float MINDRAWLENGTH = 401*3; // YOU CAN'T PASS UNTIL THE NUMBER OF PIXELS
 									  //  YOU DRAW IS BIGGER THAN THIS NUMBER
 	
 	Color[,] a = new Color[SIZE,SIZE];
@@ -24,20 +24,35 @@ public class imagething : MonoBehaviour {
 
 	float score=0;
 	float drawlength=0;
+	Color[] startimage;
 	// Use this for initialization
 	void Start () {
-		
+
+		startimage = (Color[])GetComponent<Image>().sprite.texture.GetPixels().Clone();
+//		this.gameObject.GetComponent<Image>().sprite.texture.
 		//		Debug.Log(img.fillCenter);
 		
-		clear (a,Color.white);
+//		clear (a,Color.white);
+
+		int row=0;
+		int col=0;
+		for(int i=0;i<startimage.Length;i++) {
+			if(col==SIZE) {
+				col=0;
+				row++;
+			}
+//						print (row+"\t"+col);
+			a[row,col]=startimage[i];
+			col++;
+		}
 		clear (b,Color.white);
 
-		for(int i=0;i<2;i++) {
-			for(float t=0f;t<1f;t+=0.01f) {
-				Vector3 p = Vector3.Lerp(new Vector3(100+i,100,0),new Vector3(200+i,200,0),t);
-				a[(int)p.y,(int)p.x]=Color.red;
-			}
-		}
+//		for(int i=0;i<2;i++) {
+//			for(float t=0f;t<1f;t+=0.01f) {
+//				Vector3 p = Vector3.Lerp(new Vector3(100+i,100,0),new Vector3(200+i,200,0),t);
+//				a[(int)p.y,(int)p.x]=Color.red;
+//			}
+//		}
 		
 		//		randomize(a,Color.red,Color.white);
 		//		for(int i=0;i<SIZE;i++) {
@@ -189,6 +204,19 @@ public class imagething : MonoBehaviour {
 	
 	void OnDestroy() {
 		clear(c,Color.white);
+		img = this.gameObject.GetComponent<Image>();
+		Texture2D tex = img.sprite.texture;
+
+		Color[] alt = new Color[startimage.Length];
+		int asdf=0;
+		foreach(Color i in startimage) {
+			alt[asdf++]=(i.Equals(Color.black) ? Color.clear : i);
+		}
+		//		Debug.Log (tex.width+" "+tex.height);
+		tex.SetPixels(alt);
+		tex.Apply();
+//		Sprite s = Sprite.Create(tex,new Rect(0,0,Mathf.Sqrt(startimage.Length),Mathf.Sqrt(startimage.Length)),Vector2.up);
+//		img.sprite=s;
 	}
 	
 	public void paint(Color[,] r) {
