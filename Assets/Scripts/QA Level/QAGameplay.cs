@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 public class QAGameplay : MonoBehaviour {
@@ -28,6 +29,32 @@ public class QAGameplay : MonoBehaviour {
         bugs.Add(GameObject.Instantiate(bug, new Vector3(Random.Range(-7, 7), Random.Range(-2, 4)), Quaternion.Euler(Vector3.back * Random.Range(-180, 180))));
     }
 
+    void OnDisable()
+    {
+        Debug.Log("CLOSING QA");
+        float increase = 0.002f;
+        for (int i = 0; i < bugsSquashed; i++)
+        {
+            float[] qualities = {MainGame.ArtQuality, MainGame.AudioQuality, MainGame.CodeQuality, MainGame.DesignQuality};
+            if (MainGame.ArtQuality <= qualities.Min())
+            {
+                MainGame.ArtQuality += increase;
+            }
+            else if (MainGame.AudioQuality <= qualities.Min())
+            {
+                MainGame.AudioQuality += increase;
+            }
+            else if (MainGame.CodeQuality <= qualities.Min())
+            {
+                MainGame.CodeQuality += increase;
+            }
+            else
+            {
+                MainGame.DesignQuality += increase;
+            }
+        }
+    }
+
 	// Update is called once per frame
     void Update()
     {
@@ -35,8 +62,7 @@ public class QAGameplay : MonoBehaviour {
         {
             //MainGame.QualityQuality += 0.05f;
             bugsSquashed++;
-            text.text = "Bugs fixed: " + bugsSquashed;
-
+            text.text = "Problems solved: " + bugsSquashed;
 
             swatter.transform.position = ((GameObject)bugs[0]).transform.position;
 
